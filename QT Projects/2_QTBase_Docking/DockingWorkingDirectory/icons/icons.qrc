@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>anchor.png</file>
+        <file>earth.png</file>
+        <file>Folder.png</file>
+        <file>Disquette.png</file>
+    </qresource>
+</RCC>

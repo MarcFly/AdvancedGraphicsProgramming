@@ -8,10 +8,10 @@ dmain::dmain(QWidget *parent) :
     ui->setupUi(this);
 
     // test docks
-    QDockWidget* dW = new QDockWidget;
+    /*QDockWidget* dW = new QDockWidget;
     dW->setWindowTitle("Lighting");
     this->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dW);
-    //tabifyDockWidget(Ui_dmain->renderingDock, dW); ?? UiMainWindow?
+    //tabifyDockWidget(Ui_dmain->renderingDock, dW); ?? UiMainWindow?*/
 }
 
 dmain::~dmain()
