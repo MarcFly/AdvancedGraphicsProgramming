@@ -46,7 +46,7 @@ public:
     {
         if (Transform->objectName().isEmpty())
             Transform->setObjectName(QString::fromUtf8("Transform"));
-        Transform->resize(292, 142);
+        Transform->resize(248, 100);
         verticalLayout = new QVBoxLayout(Transform);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         gridLayout_3 = new QGridLayout();

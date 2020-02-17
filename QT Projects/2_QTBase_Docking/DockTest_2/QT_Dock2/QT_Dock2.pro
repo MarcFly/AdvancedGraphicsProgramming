@@ -25,16 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        inspector.cpp \
         main.cpp \
         mainwindow.cpp \
-        transform.cpp
+        scene_list.cpp
 
 HEADERS += \
+        inspector.h \
         mainwindow.h \
-        transform.h
+        scene_list.h
 
 FORMS += \
+        color.ui \
         mainwindow.ui \
+        scene_list.ui \
         transform.ui
 
 # Default rules for deployment.

@@ -1,7 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "transform.h" Si se hace el codigo del widget
-#include "ui_transform.h" // para meter el
+// #include "transform.h" Si se hace el codigo del widget
+// #include "ui_transform.h" // para meter el elemento de ui directamente
+#include "inspector.h"
+#include "scene_list.h"
+
+#include <iostream>
+
+#include <QMessageBox> // include the MessageBox for user interaction
+#include <QFileDialog> // "" File Dialogs
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -17,30 +25,68 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Si utilizamos solo el .ui --------------------------------------------------------
     // new empty widget -> setupUI del widget -> poner el widget en el dock
-    uiInspector = new Ui::Transform; // Initialize the ui element
-    QWidget* TWidget = new QWidget(); // Initialize the Widget
-    uiInspector->setupUi(TWidget); // Setup the Inspector UI with the widget
-    ui->Inspector->setWidget(TWidget); // attach the widget to the dock
+//    uiTransform = new Ui::Transform; // Initialize the ui element
+//    QWidget* TWidget = new QWidget(); // Initialize the Widget
+//    uiTransform->setupUi(TWidget); // Setup the Inspector UI with the widget
+//    ui->
+//    ui->setWidget(TWidget); // attach the widget to the dock
 
-    // now uiInspector will hold every data about the setup widgets inside
-
-
+    // --------------------------------------------------------------------------------------
     // Connect Signals to Slots
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(onLoadFile()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(onSaveFile()));
+
+    // Scene_list connection to Hierarchy Dock
+    scene_list* slist = new scene_list();
+    slist->show();
+    ui->Hierarchy->setWidget(slist);
+
+    // Inspector Widget connect to Inspector Dock
+    Inspector* insp = new Inspector(); // Create base insp widget
+    insp->show(); // show it
+    ui->Inspector->setWidget(insp); // Setup Inspector dock with Inspector widget
+
+    connect(ui->Hierarchy->widget(), SIGNAL(EntitySelect(int)), ui->Inspector->widget(), SLOT(onEntitySelected(int)));
+    // As the widget is linked to the dock widget, you have to go into ->DockWidget->Widget() to get the programatic widget
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui; // Delete Main Window
-
-    delete uiInspector; // Delete the Inspector Dock/Widget
 }
 
 void MainWindow::onLoadFile()
 {
-    bool test = false;
-    return;
+
+    // Test Code for app exit
+//    QMessageBox::StandardButton button = QMessageBox::question(
+//                this, // parent
+//                "Exit Application", // Box Title
+//                "Do you want to exit without Saving?"); // Actual Message
+//    if (button == QMessageBox::Yes)
+//    {
+//        std::cout << "Exit without saving changes" << std::endl;
+//    }
+//    else
+//    {
+//     std::cout << "Cancel exit" << std::endl;
+//    }
+
+    // Open File Dialog
+    QString path = QFileDialog::getOpenFileName(
+                this, // parent
+                "Open File" // , // Title
+                // start directory, default is working directory
+                // file filters by types,
+                // selected filters,
+                // options ?
+                );
+    if (!path.isEmpty())
+    {
+        std::cout << path.toStdString() << std::endl;
+        QMessageBox::information(this, "Has intentau cargar ehto", path);
+    }
 }
 
 void MainWindow::onSaveFile()

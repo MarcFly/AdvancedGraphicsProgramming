@@ -6,7 +6,6 @@
 namespace Ui {
 class MainWindow;
 class Inspector;
-class Transform;
 }
 
 class MainWindow : public QMainWindow
@@ -25,8 +24,6 @@ public slots: // Capturar eventos
 
 private:
     Ui::MainWindow *ui;
-
-    Ui::Transform *uiInspector;
 };
 
 #endif // MAINWINDOW_H
