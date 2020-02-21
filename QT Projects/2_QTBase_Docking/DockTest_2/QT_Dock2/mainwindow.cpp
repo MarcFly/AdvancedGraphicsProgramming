@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // When connecting a signal from a class that is not included in another one
     // a middle part has to go and connect one that knows both
     // in this case, in main window that has both widgets/docks, connect widget 1 signal with widget 2 slot
-    connect(ui->Hierarchy->widget(), SIGNAL(EntitySelect(int)), ui->Inspector->widget(), SLOT(onEntitySelected(int)));
+    connect(ui->Hierarchy->widget(), SIGNAL(EntitySelect(Entity*)), ui->Inspector->widget(), SLOT(onEntitySelected(Entity*)));
     // As the widget is linked to the dock widget, you have to go into ->DockWidget->Widget() to get the programatic widget
 
     // --------------------------------------------------------------------------------------

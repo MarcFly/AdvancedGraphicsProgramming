@@ -29,7 +29,7 @@ Inspector::~Inspector()
     delete uiTransform;
 }
 
-void Inspector::onEntitySelected(int row)
+void Inspector::onEntitySelected(Entity* e)
 {
     // change detected
     if(row % 2 == 0)

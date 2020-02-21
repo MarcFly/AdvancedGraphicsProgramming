@@ -3,6 +3,17 @@
 
 #include <QWidget>
 
+struct float4
+{
+    float x,y,z,w;
+};
+
+struct Entity
+{
+
+    std::vector<std::pair<int,float4>> fake_comps;
+};
+
 namespace Ui {
 class scene_list;
 }
@@ -19,6 +30,7 @@ public:
 
 private:
     Ui::scene_list *ui;
+    std::vector<Entity*> entitties;
 
 public slots:
     void onAdd();
@@ -26,7 +38,7 @@ public slots:
     void onEntitySelected(int row);
 
 signals: // no requeren definicion de proteccion (public, private o protected)
-    void EntitySelect(/*Entity* e*/ int row);
+    void EntitySelect(/*Entity* e*/ Entity* e);
 };
 
 #endif // SCENE_LIST_H

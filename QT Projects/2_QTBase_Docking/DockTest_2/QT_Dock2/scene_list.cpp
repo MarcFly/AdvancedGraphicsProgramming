@@ -22,6 +22,7 @@ scene_list::~scene_list()
 void scene_list::onAdd()
 {
     ui->list->addItem("Entity");
+    entitties.push_back(new Entity());
 }
 
 void scene_list::onRemove()
@@ -31,5 +32,5 @@ void scene_list::onRemove()
 
 void scene_list::onEntitySelected(int row)
 {
-    emit(EntitySelect(row));
+    emit(EntitySelect(entitties[row]));
 }
