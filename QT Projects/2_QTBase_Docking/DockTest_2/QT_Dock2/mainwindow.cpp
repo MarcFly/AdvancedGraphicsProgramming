@@ -10,6 +10,9 @@
 #include <QMessageBox> // include the MessageBox for user interaction
 #include <QFileDialog> // "" File Dialogs
 
+#include "canvas.h"
+#include <QVBoxLayout>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -46,8 +49,18 @@ MainWindow::MainWindow(QWidget *parent) :
     insp->show(); // show it
     ui->Inspector->setWidget(insp); // Setup Inspector dock with Inspector widget
 
+    // When connecting a signal from a class that is not included in another one
+    // a middle part has to go and connect one that knows both
+    // in this case, in main window that has both widgets/docks, connect widget 1 signal with widget 2 slot
     connect(ui->Hierarchy->widget(), SIGNAL(EntitySelect(int)), ui->Inspector->widget(), SLOT(onEntitySelected(int)));
     // As the widget is linked to the dock widget, you have to go into ->DockWidget->Widget() to get the programatic widget
+
+    // --------------------------------------------------------------------------------------
+
+    Canvas* wcanvas = new Canvas(ui->centralWidget); // Create a base canvas
+    ui->centralWidget->setLayout(new QVBoxLayout()); // Give the centralWidget a Layout
+    ui->centralWidget->layout()->addWidget(wcanvas); // add the canvas widget to the central Widget
+
 
 }
 

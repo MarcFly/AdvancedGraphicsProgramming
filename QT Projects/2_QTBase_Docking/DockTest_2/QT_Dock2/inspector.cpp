@@ -3,6 +3,7 @@
 #include "ui_color.h"
 #include <QVBoxLayout> // A Layout that can hold widgets
 #include <QSpacerItem> // The Spring that presses things together
+
 Inspector::Inspector(QWidget *parent) :
     QWidget(parent), uiTransform(new Ui::Transform), uiColor(new Ui::Color)
 {
@@ -31,7 +32,12 @@ Inspector::~Inspector()
 void Inspector::onEntitySelected(int row)
 {
     // change detected
-    int tt = row;
+    if(row % 2 == 0)
+    {
+
+    }
+        //uiTransform->
+
 }
 
 

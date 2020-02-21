@@ -26,14 +26,14 @@ public:
     QVBoxLayout *verticalLayout;
     QFrame *line;
     QHBoxLayout *horizontalLayout;
-    QLabel *label;
-    QSpinBox *R;
-    QLabel *label_2;
-    QSpinBox *G;
-    QLabel *label_3;
-    QSpinBox *B;
-    QLabel *label_4;
-    QSpinBox *A;
+    QLabel *labelR;
+    QSpinBox *intR;
+    QLabel *labelG;
+    QSpinBox *intG;
+    QLabel *labelB;
+    QSpinBox *intB;
+    QLabel *labelA;
+    QSpinBox *intA;
 
     void setupUi(QWidget *Color)
     {
@@ -51,45 +51,45 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        label = new QLabel(Color);
-        label->setObjectName(QString::fromUtf8("label"));
+        labelR = new QLabel(Color);
+        labelR->setObjectName(QString::fromUtf8("labelR"));
 
-        horizontalLayout->addWidget(label);
+        horizontalLayout->addWidget(labelR);
 
-        R = new QSpinBox(Color);
-        R->setObjectName(QString::fromUtf8("R"));
+        intR = new QSpinBox(Color);
+        intR->setObjectName(QString::fromUtf8("intR"));
 
-        horizontalLayout->addWidget(R);
+        horizontalLayout->addWidget(intR);
 
-        label_2 = new QLabel(Color);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        labelG = new QLabel(Color);
+        labelG->setObjectName(QString::fromUtf8("labelG"));
 
-        horizontalLayout->addWidget(label_2);
+        horizontalLayout->addWidget(labelG);
 
-        G = new QSpinBox(Color);
-        G->setObjectName(QString::fromUtf8("G"));
+        intG = new QSpinBox(Color);
+        intG->setObjectName(QString::fromUtf8("intG"));
 
-        horizontalLayout->addWidget(G);
+        horizontalLayout->addWidget(intG);
 
-        label_3 = new QLabel(Color);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
+        labelB = new QLabel(Color);
+        labelB->setObjectName(QString::fromUtf8("labelB"));
 
-        horizontalLayout->addWidget(label_3);
+        horizontalLayout->addWidget(labelB);
 
-        B = new QSpinBox(Color);
-        B->setObjectName(QString::fromUtf8("B"));
+        intB = new QSpinBox(Color);
+        intB->setObjectName(QString::fromUtf8("intB"));
 
-        horizontalLayout->addWidget(B);
+        horizontalLayout->addWidget(intB);
 
-        label_4 = new QLabel(Color);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
+        labelA = new QLabel(Color);
+        labelA->setObjectName(QString::fromUtf8("labelA"));
 
-        horizontalLayout->addWidget(label_4);
+        horizontalLayout->addWidget(labelA);
 
-        A = new QSpinBox(Color);
-        A->setObjectName(QString::fromUtf8("A"));
+        intA = new QSpinBox(Color);
+        intA->setObjectName(QString::fromUtf8("intA"));
 
-        horizontalLayout->addWidget(A);
+        horizontalLayout->addWidget(intA);
 
 
         verticalLayout->addLayout(horizontalLayout);
@@ -103,10 +103,10 @@ public:
     void retranslateUi(QWidget *Color)
     {
         Color->setWindowTitle(QApplication::translate("Color", "Form", nullptr));
-        label->setText(QApplication::translate("Color", "R", nullptr));
-        label_2->setText(QApplication::translate("Color", "G", nullptr));
-        label_3->setText(QApplication::translate("Color", "B", nullptr));
-        label_4->setText(QApplication::translate("Color", "A", nullptr));
+        labelR->setText(QApplication::translate("Color", "R", nullptr));
+        labelG->setText(QApplication::translate("Color", "G", nullptr));
+        labelB->setText(QApplication::translate("Color", "B", nullptr));
+        labelA->setText(QApplication::translate("Color", "A", nullptr));
     } // retranslateUi
 
 };

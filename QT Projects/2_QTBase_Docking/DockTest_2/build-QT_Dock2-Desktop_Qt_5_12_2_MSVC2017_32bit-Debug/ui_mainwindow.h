@@ -16,9 +16,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -30,10 +28,6 @@ public:
     QAction *actionLoad;
     QAction *actionSave;
     QWidget *centralWidget;
-    QTabWidget *tabWidget;
-    QWidget *tab;
-    QOpenGLWidget *openGLWidget;
-    QWidget *tab_2;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -65,18 +59,6 @@ public:
         actionSave->setIcon(icon1);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        tabWidget = new QTabWidget(centralWidget);
-        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 0, 241, 211));
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        openGLWidget = new QOpenGLWidget(tab);
-        openGLWidget->setObjectName(QString::fromUtf8("openGLWidget"));
-        openGLWidget->setGeometry(QRect(0, 0, 231, 181));
-        tabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        tabWidget->addTab(tab_2, QString());
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -126,9 +108,6 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
-
-
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -137,8 +116,6 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         actionLoad->setText(QApplication::translate("MainWindow", "Load", nullptr));
         actionSave->setText(QApplication::translate("MainWindow", "Save", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Tab 1", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Tab 2", nullptr));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "Edit", nullptr));
         menuView->setTitle(QApplication::translate("MainWindow", "View", nullptr));
