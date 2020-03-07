@@ -50,7 +50,7 @@ public:
     {
         if (Transform->objectName().isEmpty())
             Transform->setObjectName(QString::fromUtf8("Transform"));
-        Transform->resize(392, 181);
+        Transform->resize(357, 181);
         horizontalLayout = new QHBoxLayout(Transform);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         layoutPosScale = new QVBoxLayout();

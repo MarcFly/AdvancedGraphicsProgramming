@@ -296,6 +296,7 @@ Makefile: ..\ZurullitoPaint\ZurullitoPaint.pro C:\Qt\5.14.1\msvc2017\mkspecs\win
 		C:\Qt\5.14.1\msvc2017\lib\Qt5Core.prl \
 		C:\Qt\5.14.1\msvc2017\lib\qtmain.prl \
 		C:\Qt\5.14.1\msvc2017\mkspecs\features\build_pass.prf \
+		..\ShapePainterApp\icons\Icons.qrc \
 		C:\Qt\5.14.1\msvc2017\lib\Qt5Widgetsd.prl \
 		C:\Qt\5.14.1\msvc2017\lib\Qt5Guid.prl \
 		C:\Qt\5.14.1\msvc2017\lib\Qt5Cored.prl \
@@ -513,6 +514,7 @@ C:\Qt\5.14.1\msvc2017\lib\Qt5Gui.prl:
 C:\Qt\5.14.1\msvc2017\lib\Qt5Core.prl:
 C:\Qt\5.14.1\msvc2017\lib\qtmain.prl:
 C:\Qt\5.14.1\msvc2017\mkspecs\features\build_pass.prf:
+..\ShapePainterApp\icons\Icons.qrc:
 C:\Qt\5.14.1\msvc2017\lib\Qt5Widgetsd.prl:
 C:\Qt\5.14.1\msvc2017\lib\Qt5Guid.prl:
 C:\Qt\5.14.1\msvc2017\lib\Qt5Cored.prl:

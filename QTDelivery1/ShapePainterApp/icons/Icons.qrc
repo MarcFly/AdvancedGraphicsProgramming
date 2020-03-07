@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>camera.png</file>
+        <file>Disquette.png</file>
+        <file>Empty document new.png</file>
+        <file>Folder.png</file>
+        <file>Orb minus.png</file>
+        <file>Orb plus.png</file>
+        <file>Signal attention.png</file>
+        <file>Picture.png</file>
+    </qresource>
+</RCC>

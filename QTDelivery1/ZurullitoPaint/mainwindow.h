@@ -7,6 +7,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class ECS;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,7 +19,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
+    ECS* ecs;
 public slots:
     //void onLoadFile(std::string file);
     //void onSaveFile(std::string path);

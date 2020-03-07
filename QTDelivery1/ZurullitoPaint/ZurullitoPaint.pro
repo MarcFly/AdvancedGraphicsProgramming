@@ -16,18 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    canvas.cpp \
+    ecs.cpp \
     hierarchy.cpp \
     inspector.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    test.cpp
 
 HEADERS += \
+    Globals.h \
+    canvas.h \
+    ecs.h \
     hierarchy.h \
     inspector.h \
-    mainwindow.h
+    mainwindow.h \
+    test.h
 
 FORMS += \
     Transform.ui \
+    hierarchy.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
@@ -37,3 +45,6 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    ../ShapePainterApp/icons/Icons.qrc
