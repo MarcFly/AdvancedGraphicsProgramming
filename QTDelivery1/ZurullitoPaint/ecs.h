@@ -10,10 +10,7 @@ struct Entity
     std::vector<Entity*> children;
     uint id;
 
-    Transform t;
-    DrawShapes shape;
-    QBrush fill;
-    QPen outline;
+    DrawStruct drawData;
 };
 
 class ECS : public QObject
@@ -30,6 +27,7 @@ private:
     std::vector<Entity*> entities;
 
 public slots:
+    void entitySelected(uint id);
     void AddEntity(uint id, uint p_id);
     void RemoveEntity(uint id);
     void executeDraw();
@@ -37,6 +35,8 @@ public slots:
 signals:
     void askDraw(DrawStruct drawData);
     void callEnd();
+    void callRePaint();
+    void selectedEntity(const DrawStruct& drawData);
 };
 
 #endif // ECS_H

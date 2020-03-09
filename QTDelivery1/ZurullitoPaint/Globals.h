@@ -11,18 +11,18 @@ enum DrawShapes
 
 struct Transform
 {
-    int px,py;
-    float sx,sy;
-    int r;
+    int px = 0,py = 0;
+    float sx = 100,sy = 100;
+    int r = 45;
 };
 
 #include <QPainter>
 
 struct DrawStruct
 {
-    QBrush fill;
-    QPen outline;
-    DrawShapes shape;
+    QBrush fill = QBrush(Qt::SolidPattern);
+    QPen outline = QPen(QColor(0,0,0));
+    DrawShapes shape = DrawShapes::Box;
     Transform t;
 };
 

@@ -16,6 +16,12 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+private:
+    void drawBox(const Transform& t);
+    void drawLine(const Transform& t);
+    void drawCircle(const Transform& t);
+    // More draw Functions
+
 
 private:
     QPainter* painter;
@@ -28,7 +34,8 @@ signals:
 
 public slots:
     void executeEnd();
-    void drawEntity(DrawStruct drawData);
+    void drawEntity(const DrawStruct& drawData);
+    void RePaint() {repaint();}
 };
 
 #endif // CANVAS_H

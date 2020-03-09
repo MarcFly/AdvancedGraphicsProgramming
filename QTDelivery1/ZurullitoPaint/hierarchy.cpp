@@ -10,6 +10,15 @@ Hierarchy::Hierarchy(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Setup the tree
+    ui->treeHierarchy->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->treeHierarchy->setDragEnabled(true);
+    ui->treeHierarchy->setAcceptDrops(true);
+    ui->treeHierarchy->setDropIndicatorShown(true);
+    ui->treeHierarchy->setDragDropMode(QAbstractItemView::InternalMove);
+
+    connect(ui->treeHierarchy, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(currItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+
     // Connect the signals and slots from the buttons to functions to add thigngs
     connect(ui->buttonAdd, SIGNAL(clicked()), this, SLOT(onAdd()));
     connect(ui->buttonRemove, SIGNAL(clicked()), this, SLOT(onRemove()));
@@ -21,6 +30,12 @@ Hierarchy::~Hierarchy()
         RecursiveRemove( ui->treeHierarchy->topLevelItem(i));
 
     delete ui;
+}
+void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
+{
+    if(cur != nullptr)
+        entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
+    // do something with prev?
 }
 
 void Hierarchy::onAdd()
@@ -47,9 +62,17 @@ void Hierarchy::onAdd()
     else
     {
         curr->addChild(new_item);
-        AddEntity(id, curr->data(0, Qt::DisplayRole).toUInt());
+        AddEntity(id, curr->data(1, Qt::DisplayRole).toUInt());
     }
+
+    ui->buttonAdd->setDisabled(true);
+    ui->buttonRemove->setDisabled(true);
+    ar_block.singleShot(1000, [this]{
+        this->ui->buttonAdd->setDisabled(false);
+        this->ui->buttonRemove->setDisabled(false);
+    });
 }
+
 
 void Hierarchy::onRemove()
 {

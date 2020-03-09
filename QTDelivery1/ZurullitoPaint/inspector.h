@@ -2,12 +2,9 @@
 #define INSPECTOR_H
 
 #include <QWidget>
-
+#include "Globals.h"
 namespace Ui {
     class Transform;
-//    class Outline;
-//    class Fill;
-//    class Shape;
 }
 
 //===================================================
@@ -15,7 +12,7 @@ namespace Ui {
 //===================================================
 
 void SetupTransform(Ui::Transform* uiT);
-void UpdateTransform(/**/);
+void UpdateTransform(Ui::Transform* uiT, const Transform& t);
 
 //===================================================
 //===================================================
@@ -34,7 +31,7 @@ private:
 //    Ui::Shape *uiShape;
 
 public slots:
-    //void onEntitySelected(/**/);
+    void updateEntity(const DrawStruct& drawData);
 
 signals:
     void UpdatedEntity(/* entity id */);

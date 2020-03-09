@@ -2,6 +2,7 @@
 #define HIERARCHY_H
 
 #include <QWidget>
+#include <QTimer>
 
 class QTreeWidgetItem;
 
@@ -19,18 +20,22 @@ public:
 
 private:
     void RecursiveRemove(QTreeWidgetItem* curr);
+    void BlockButtons();
 
 private:
     Ui::Hierarchy *ui;
     uint itemcount;
+    QTimer ar_block;
 
 public slots:
     void onAdd();
     void onRemove();
+    void currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev);
 
 signals:
     void AddEntity(uint id, uint parent_id);
     void RemoveEntity(uint id);
+    void entitySelected(uint id);
 };
 
 #endif // HIERARCHY_H

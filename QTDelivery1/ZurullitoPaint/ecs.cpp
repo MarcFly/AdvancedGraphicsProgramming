@@ -61,6 +61,7 @@ void ECS::AddEntity(uint id, uint p_id)
 
     }
 
+    callRePaint();
 }
 
 void ECS::RemoveEntity(uint id)
@@ -81,13 +82,24 @@ void ECS::RemoveEntity(uint id)
 
         delete del_ent;
     }
+
+    callRePaint();
 }
 
 void ECS::executeDraw()
 {
     // Ask draws for the object in the proper order
+    for(uint i = 0; i < entities.size(); ++i)
+        askDraw(entities[i]->drawData);
 
     // Tell the painter that it can end the painting session
     callEnd();
+}
+
+void ECS::entitySelected(uint id)
+{
+    uint e = FindEntity(id);
+    if(e != UINT_MAX)
+       selectedEntity(entities[e]->drawData);
 }
 

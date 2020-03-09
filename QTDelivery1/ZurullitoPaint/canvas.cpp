@@ -38,9 +38,32 @@ void Canvas::paintEvent(QPaintEvent* ev)
     }
 }
 
-void Canvas::drawEntity(DrawStruct drawData)
+void Canvas::drawEntity(const DrawStruct& drawData)
 {
+    painter->setPen(drawData.outline);
+    painter->setBrush(drawData.fill);
 
+    const Transform& t = drawData.t;
+
+    switch(drawData.shape)
+    {
+    case DrawShapes::BG:
+        break;
+    case DrawShapes::Box:
+        painter->rotate(t.r);
+        painter->drawRect(t.px, t.py, t.sx, t.sy);
+        painter->rotate(-t.r);
+        drawBox(drawData.t);
+        break ;
+    case DrawShapes::Circle:
+        break;
+    case DrawShapes::Line:
+        break;
+    }
+}
+
+void Canvas::drawBox(const Transform &t)
+{
 }
 
 void Canvas::executeEnd()

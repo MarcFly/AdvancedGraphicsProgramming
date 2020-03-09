@@ -28,6 +28,11 @@ Inspector::~Inspector()
     delete uiTransform;
 }
 
+void Inspector::updateEntity(const DrawStruct& drawData)
+{
+    UpdateTransform(uiTransform, drawData.t);
+}
+
 //===================================================
 // Transform Setup //================================
 //===================================================
@@ -40,6 +45,12 @@ void SetupTransform(Ui::Transform *uiT)
     uiT->Rinput->setMaximum(360);
     Inspector::connect(uiT->Rdial, SIGNAL(valueChanged(int)), uiT->Rinput, SLOT(setValue(int)));
     Inspector::connect(uiT->Rinput, SIGNAL(valueChanged(int)), uiT->Rdial, SLOT(setValue(int)));
+}
+
+void UpdateTransform(Ui::Transform* uiT,const Transform& t)
+{
+    uiT->Rdial->setValue(t.r);
+    uiT->Rinput->setValue(t.r);
 }
 
 //===================================================
