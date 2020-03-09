@@ -31,7 +31,7 @@ public slots:
     void onAdd();
     void onRemove();
     void currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev);
-
+    void changedName(const char* name);
 signals:
     void AddEntity(uint id, uint parent_id);
     void RemoveEntity(uint id);

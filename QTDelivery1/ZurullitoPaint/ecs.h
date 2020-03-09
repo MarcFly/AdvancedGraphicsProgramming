@@ -4,14 +4,7 @@
 #include <QObject>
 #include "Globals.h"
 
-struct Entity
-{
-    Entity* parent;
-    std::vector<Entity*> children;
-    uint id;
 
-    DrawStruct drawData;
-};
 
 class ECS : public QObject
 {
@@ -31,12 +24,14 @@ public slots:
     void AddEntity(uint id, uint p_id);
     void RemoveEntity(uint id);
     void executeDraw();
+    void updatedEntity(const uint id, const char* name, DrawStruct& drawData);
 
 signals:
     void askDraw(DrawStruct drawData);
     void callEnd();
     void callRePaint();
-    void selectedEntity(const DrawStruct& drawData);
+    void selectedEntity(const uint id, const char* name, const DrawStruct& drawData);
+    void changedName(const char* name);
 };
 
 #endif // ECS_H

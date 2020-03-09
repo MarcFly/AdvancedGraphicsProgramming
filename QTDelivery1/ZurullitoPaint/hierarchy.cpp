@@ -38,6 +38,11 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
     // do something with prev?
 }
 
+void Hierarchy::changedName(const char* name)
+{
+    ui->treeHierarchy->currentItem()->setData(0, Qt::DisplayRole, QString(name));
+}
+
 void Hierarchy::onAdd()
 {
     itemcount++;
@@ -47,7 +52,7 @@ void Hierarchy::onAdd()
     uint id = qrand();
 
     QTreeWidgetItem* new_item = new QTreeWidgetItem();
-    new_item->setData( 0, Qt::DisplayRole, QString("new_item_").append(itemcount));
+    new_item->setData( 0, Qt::DisplayRole, QString("new_item_").append(std::to_string(itemcount).c_str()));
     new_item->setData( 1, Qt::DisplayRole, id);
 
     QTreeWidgetItem* curr = ui->treeHierarchy->currentItem();
@@ -79,20 +84,29 @@ void Hierarchy::onRemove()
     QTreeWidgetItem* curr = ui->treeHierarchy->currentItem();
     if(curr) RecursiveRemove(curr);
 
+    ui->buttonAdd->setDisabled(true);
+    ui->buttonRemove->setDisabled(true);
+    ar_block.singleShot(1000, [this]{
+        this->ui->buttonAdd->setDisabled(false);
+        this->ui->buttonRemove->setDisabled(false);
+    });
+
 }
 
 void Hierarchy::RecursiveRemove(QTreeWidgetItem* curr)
 {
-    for(int i = 0; i < curr->childCount(); i++)
-    {
-        RecursiveRemove(curr->child(i));
-    }
+    while(curr->childCount() > 0)
+        RecursiveRemove(curr->child(0));
+
     RemoveEntity(curr->data(1, Qt::DisplayRole).toUInt());
     QTreeWidgetItem* p = curr->parent();
-    if(p) p->removeChild(curr);
-    ui->treeHierarchy->removeItemWidget(curr, 0);
-    ui->treeHierarchy->removeItemWidget(curr, 1);
-
+    if(p)
+        p->removeChild(curr);
+    else
+    {
+        ui->treeHierarchy->removeItemWidget(curr, 0);
+        ui->treeHierarchy->removeItemWidget(curr, 1);
+    }
     delete curr;
     curr = nullptr;
     itemcount--;

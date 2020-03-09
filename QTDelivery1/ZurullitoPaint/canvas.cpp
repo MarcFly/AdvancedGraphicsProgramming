@@ -27,6 +27,9 @@ void Canvas::paintEvent(QPaintEvent* ev)
 {
     if(allowBegin)
     {
+        const QSize& s = this->size();
+        painter->eraseRect(QRectF(0,0,s.width(),s.height()));
+
         allowBegin = false;
         painter->begin(this);
 
@@ -50,9 +53,16 @@ void Canvas::drawEntity(const DrawStruct& drawData)
     case DrawShapes::BG:
         break;
     case DrawShapes::Box:
+        painter->translate(t.px, t.py);
         painter->rotate(t.r);
-        painter->drawRect(t.px, t.py, t.sx, t.sy);
+        painter->translate(- t.sx / 2,- t.sy/2);
+
+        painter->drawRect(0, 0, t.sx, t.sy);
+
+        painter->translate(t.sx / 2, t.sy/2);
         painter->rotate(-t.r);
+        painter->translate(-t.px,-t.py);
+
         drawBox(drawData.t);
         break ;
     case DrawShapes::Circle:

@@ -32,7 +32,7 @@ void ECS::AddEntity(uint id, uint p_id)
     if(p_id==0)
     {
         newE->parent = nullptr;
-        entities.push_back(new Entity);
+        entities.push_back(newE);
     }
     else
     {
@@ -77,8 +77,8 @@ void ECS::RemoveEntity(uint id)
         for(uint i = ent_ind+1; i < entities.size(); ++i)
             swap_v.push_back(entities[i]);
 
-        for(uint i = 0; i < del_ent->children.size(); ++i)
-            RemoveEntity(del_ent->children[i]->id);
+        entities.swap(swap_v);
+        swap_v.clear();
 
         delete del_ent;
     }
@@ -100,6 +100,29 @@ void ECS::entitySelected(uint id)
 {
     uint e = FindEntity(id);
     if(e != UINT_MAX)
-       selectedEntity(entities[e]->drawData);
+       selectedEntity(id, entities[e]->name.c_str(), entities[e]->drawData);
+}
+
+void ECS::updatedEntity(const uint id, const char* name, DrawStruct& drawData)
+{
+    uint ent_ind = FindEntity(id);
+    if(ent_ind != UINT_MAX)
+    {
+        Entity* e = entities[ent_ind];
+        e->name = name;
+        changedName(e->name.c_str());
+
+        e->drawData.t.px = drawData.t.px;
+        e->drawData.t.py = drawData.t.py;
+        e->drawData.t.sx = drawData.t.sx;
+        e->drawData.t.sy = drawData.t.sy;
+        e->drawData.t.r = drawData.t.r;
+
+        e->drawData.fill = drawData.fill;
+        e->drawData.shape = drawData.shape;
+        e->drawData.outline = drawData.outline;
+
+        callRePaint();
+    }
 }
 

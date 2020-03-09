@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dockInspector->setWidget(insp);
 
     // Connect ecs and Inspector signals and slots
-    connect(ecs, SIGNAL(selectedEntity(const DrawStruct&)), insp, SLOT(updateEntity(const DrawStruct&)));
-
+    connect(ecs, SIGNAL(selectedEntity(const uint, const char*,const DrawStruct&)), insp, SLOT(updateEntity(const uint, const char*, const DrawStruct&)));
+    connect(insp, SIGNAL(UpdatedEntity(const uint, const char*, DrawStruct&)), ecs, SLOT(updatedEntity(const uint, const char*, DrawStruct&)));
     // Linking Hierarchy Widget to Widget Dock
     Hierarchy* hier = new Hierarchy();
     hier->show();
@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(hier, SIGNAL(AddEntity(uint,uint)), ecs, SLOT(AddEntity(uint,uint)));
     connect(hier, SIGNAL(RemoveEntity(uint)), ecs, SLOT(RemoveEntity(uint)));
     connect(hier, SIGNAL(entitySelected(uint)), ecs, SLOT(entitySelected(uint)));
+    connect(ecs, SIGNAL(changedName(const char*)), hier, SLOT(changedName(const char*)));
+
     // Create a Canvas in the Central Widget
     Canvas* wcanvas = new Canvas(ui->centralwidget);
     ui->centralwidget->setLayout(new QVBoxLayout());

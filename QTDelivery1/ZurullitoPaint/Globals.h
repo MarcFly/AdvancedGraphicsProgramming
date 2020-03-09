@@ -26,4 +26,15 @@ struct DrawStruct
     Transform t;
 };
 
+struct Entity
+{
+    Entity* parent = nullptr;
+    std::vector<Entity*> children;
+    uint id = UINT_MAX;
+
+    std::string name = "";
+
+    DrawStruct drawData;
+};
+
 #endif // GLOBALS_H

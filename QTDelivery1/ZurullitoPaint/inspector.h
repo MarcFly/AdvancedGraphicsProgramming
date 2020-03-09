@@ -3,19 +3,12 @@
 
 #include <QWidget>
 #include "Globals.h"
+
+class QTextEdit;
+
 namespace Ui {
     class Transform;
 }
-
-//===================================================
-// Component Declarations //=========================
-//===================================================
-
-void SetupTransform(Ui::Transform* uiT);
-void UpdateTransform(Ui::Transform* uiT, const Transform& t);
-
-//===================================================
-//===================================================
 
 class Inspector : public QWidget
 {
@@ -24,18 +17,24 @@ public:
     explicit Inspector(QWidget *parent = nullptr);
     ~Inspector();
 
+    void SetupTransform();
+    void UpdateTransform(const Transform& t);
+
 private:
+    QTextEdit* uiName;
     Ui::Transform *uiTransform;
 //    Ui::Outline *uiOutline;
 //    Ui::Fill *uiFill;
 //    Ui::Shape *uiShape;
 
+    uint curr_id;
+    bool updating;
+
 public slots:
-    void updateEntity(const DrawStruct& drawData);
-
+    void updateEntity(const uint id, const char* name, const DrawStruct& drawData);
+    void sendUpdate();
 signals:
-    void UpdatedEntity(/* entity id */);
-
+    void UpdatedEntity(const uint id, const char* name, DrawStruct& drawData);
 };
 
 #endif // INSPECTOR_H
