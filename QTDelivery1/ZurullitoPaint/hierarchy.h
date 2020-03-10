@@ -26,7 +26,7 @@ private:
     Ui::Hierarchy *ui;
     uint itemcount;
     QTimer ar_block;
-
+    bool fromAR;
 public slots:
     void onAdd();
     void onRemove();

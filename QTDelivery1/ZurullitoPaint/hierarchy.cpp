@@ -6,7 +6,8 @@
 Hierarchy::Hierarchy(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Hierarchy),
-    itemcount(0)
+    itemcount(0),
+    fromAR(false)
 {
     ui->setupUi(this);
 
@@ -37,13 +38,21 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
         entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
 
     // Issue, tree parenting is not updated when this is called
-    if(prev != nullptr)
-    {
-        if(prev->parent() != nullptr)
-            updateParenting(prev->data(1, Qt::DisplayRole).toUInt(), prev->parent()->data(1, Qt::DisplayRole).toUInt(), currItemPos(prev));
-        else
-            updateParenting(prev->data(1, Qt::DisplayRole).toUInt(), NULL, currItemPos(prev));
+    if(prev != nullptr && !fromAR)
+    {    
+        QTimer ss_t;
+        uint id = prev->data(1, Qt::DisplayRole).toUInt();
+        uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
+
+        ss_t.singleShot(500, nullptr, [id, prev, this]
+        {
+            uint p_id = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
+            uint pos = this->currItemPos(prev);
+            updateParenting(id, p_id, pos);
+
+        });
     }
+    fromAR = false;
 }
 
 uint Hierarchy::currItemPos(QTreeWidgetItem* curr)
@@ -107,6 +116,8 @@ void Hierarchy::onAdd()
 
 void Hierarchy::onRemove()
 {
+    fromAR = true;
+
     QTreeWidgetItem* curr = ui->treeHierarchy->currentItem();
     if(curr) RecursiveRemove(curr);
 
@@ -116,6 +127,7 @@ void Hierarchy::onRemove()
         this->ui->buttonAdd->setDisabled(false);
         this->ui->buttonRemove->setDisabled(false);
     });
+
 
 }
 
