@@ -21,7 +21,7 @@ public:
 private:
     void RecursiveRemove(QTreeWidgetItem* curr);
     void BlockButtons();
-
+    uint currItemPos(QTreeWidgetItem* curr);
 private:
     Ui::Hierarchy *ui;
     uint itemcount;
@@ -36,6 +36,7 @@ signals:
     void AddEntity(uint id, uint parent_id);
     void RemoveEntity(uint id);
     void entitySelected(uint id);
+    void updateParenting(uint id, uint p_id, uint pos);
 };
 
 #endif // HIERARCHY_H

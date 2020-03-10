@@ -16,6 +16,8 @@ public:
     //void Update();
     uint FindEntity(uint id);
 
+    void changeParent(Entity* e, uint p_id, uint pos);
+
 private:
     std::vector<Entity*> entities;
 
@@ -25,6 +27,7 @@ public slots:
     void RemoveEntity(uint id);
     void executeDraw();
     void updatedEntity(const uint id, const char* name, DrawStruct& drawData);
+    void updateParenting(uint id, uint p_id, uint pos);
 
 signals:
     void askDraw(DrawStruct drawData);

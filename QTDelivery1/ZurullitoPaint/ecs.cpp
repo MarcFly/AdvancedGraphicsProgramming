@@ -126,3 +126,61 @@ void ECS::updatedEntity(const uint id, const char* name, DrawStruct& drawData)
     }
 }
 
+void ECS::updateParenting(uint id, uint p_id, uint pos)
+{
+    uint ent_ind = FindEntity(id);
+    if(ent_ind != UINT_MAX)
+    {
+        Entity* e = entities[ent_ind];
+        if(e->parent == nullptr)
+        {
+            if(p_id != NULL)
+                changeParent(e, p_id, pos);
+        }
+        else if(e->parent != nullptr && e->parent->id != p_id)
+        {
+            changeParent(e, p_id, pos);
+        }
+    }
+}
+
+void ECS::changeParent(Entity *e, uint p_id, uint pos)
+{
+    uint p_ind = FindEntity(p_id);
+    Entity* new_p = nullptr;
+    if(p_ind != UINT_MAX)
+        new_p = entities[p_ind];
+    Entity* old_p = e->parent;
+
+    std::vector<Entity*> swap_v;
+
+    // Remove from child list of old parent
+    if(old_p != nullptr)
+    {
+        for(uint i = 0; i < old_p->children.size(); ++i)
+        {
+            if(old_p->children[i] != e)
+                swap_v.push_back(entities[i]);
+        }
+
+        old_p->children.swap(swap_v);
+        swap_v.clear();
+    }
+
+    e->parent = new_p;
+
+    if(new_p != nullptr)
+    {
+        // naive reparenting, no proper order
+        new_p->children.push_back(e);
+
+        // Child reordering, not yet in the entities vector
+        e = new_p->children[pos];
+        new_p->children[pos] = new_p->children[new_p->children.size()-1];
+        new_p->children[new_p->children.size()-1] = e;
+
+        //  Reorder vector with new list
+
+    }
+
+}

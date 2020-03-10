@@ -35,7 +35,33 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
     if(cur != nullptr)
         entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
-    // do something with prev?
+
+    // Issue, tree parenting is not updated when this is called
+    if(prev != nullptr)
+    {
+        if(prev->parent() != nullptr)
+            updateParenting(prev->data(1, Qt::DisplayRole).toUInt(), prev->parent()->data(1, Qt::DisplayRole).toUInt(), currItemPos(prev));
+        else
+            updateParenting(prev->data(1, Qt::DisplayRole).toUInt(), NULL, currItemPos(prev));
+    }
+}
+
+uint Hierarchy::currItemPos(QTreeWidgetItem* curr)
+{
+    uint ret = 0;
+
+    if(curr->parent() == nullptr)
+    {
+        while(ui->treeHierarchy->topLevelItem(ret) != curr && ret < ui->treeHierarchy->topLevelItemCount())
+            ret++;
+    }
+    else
+    {
+        while(curr->parent()->child(ret) != curr && ret < curr->parent()->childCount())
+            ret++;
+    }
+
+    return ret;
 }
 
 void Hierarchy::changedName(const char* name)
