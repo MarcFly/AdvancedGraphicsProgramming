@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QComboBox>
+#include <QSpinBox>
 
 //===================================================================
 canvasShow::canvasShow(bool is_fp, QWidget* parent) : QWidget(parent), fp(is_fp)
@@ -103,6 +104,16 @@ FillOutline::FillOutline(bool is_fp, QWidget *parent) : QWidget(parent)
     types->addItems(strings);
     layout->addWidget(types);
 
+    width = new QSpinBox(this);
+    width->hide();
+    if(!is_fp)
+    {
+        width->show();
+        width->setRange(1,999999);
+        //width->setValue(1);
+        layout->addWidget(width);
+    }
+
     expo = new canvasShow(is_fp, this);
     layout->addWidget(expo);
 
@@ -111,6 +122,7 @@ FillOutline::FillOutline(bool is_fp, QWidget *parent) : QWidget(parent)
     // Connect intern components
     connect(types, SIGNAL(currentIndexChanged(int)), this, SLOT(change_fp(int)));
 
+    connect(width, SIGNAL(valueChanged(int)), this, SLOT(change_pw(int)));
 }
 
 FillOutline::~FillOutline()
@@ -118,6 +130,7 @@ FillOutline::~FillOutline()
     delete expo;
     delete types;
     delete title;
+    delete width;
 }
 
 void FillOutline::change_fp(int val)
@@ -129,6 +142,16 @@ void FillOutline::change_fp(int val)
 
     expo->repaint();
     sendUpdate();
+}
+
+void FillOutline::change_pw(int val)
+{
+    if(!expo->fp)
+    {
+        expo->p->setWidth(val);
+        expo->repaint();
+        sendUpdate();
+    }
 }
 
 void FillOutline::Update(const QBrush &b, const QPen &p)

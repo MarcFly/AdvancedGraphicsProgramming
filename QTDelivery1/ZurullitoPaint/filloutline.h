@@ -14,7 +14,6 @@ public:
     void paintEvent(QPaintEvent* ev) override;
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
-    void Repaint() {repaint();}
 
 public:
     bool fp;
@@ -29,6 +28,7 @@ signals:
 
 class QLabel;
 class QComboBox;
+class QSpinBox;
 
 class FillOutline : public QWidget
 {
@@ -52,6 +52,7 @@ public:
 private:
     QLabel* title;
     QComboBox* types;
+    QSpinBox* width;
     canvasShow* expo;
 
 signals:
@@ -59,6 +60,7 @@ signals:
 
 public slots:
     void change_fp(int val);
+    void change_pw(int val);
 
 };
 

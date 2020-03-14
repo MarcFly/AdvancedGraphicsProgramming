@@ -16,12 +16,6 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-private:
-    void drawBox(const Transform& t);
-    void drawLine(const Transform& t);
-    void drawCircle(const Transform& t);
-    // More draw Functions
-
 
 private:
     QPainter* painter;

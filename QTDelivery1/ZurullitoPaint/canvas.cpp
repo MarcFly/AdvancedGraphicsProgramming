@@ -48,32 +48,28 @@ void Canvas::drawEntity(const DrawStruct& drawData)
 
     const Transform& t = drawData.t;
 
+    painter->translate(t.px, t.py);
+    painter->rotate(t.r);
+    painter->translate(- t.sx / 2,- t.sy/2);
+
     switch(drawData.shape)
     {
     case DrawShapes::BG:
         break;
-    case DrawShapes::Box:
-        painter->translate(t.px, t.py);
-        painter->rotate(t.r);
-        painter->translate(- t.sx / 2,- t.sy/2);
-
-        painter->drawRect(0, 0, t.sx, t.sy);
-
-        painter->translate(t.sx / 2, t.sy/2);
-        painter->rotate(-t.r);
-        painter->translate(-t.px,-t.py);
-
-        drawBox(drawData.t);
-        break ;
     case DrawShapes::Circle:
+        painter->drawEllipse(0, 0, t.sx, t.sy);
+        break;
+    case DrawShapes::Box:
+        painter->drawRect(0, 0, t.sx, t.sy);
         break;
     case DrawShapes::Line:
+        painter->drawLine(0, 0, t.sx, t.sy);
         break;
     }
-}
 
-void Canvas::drawBox(const Transform &t)
-{
+    painter->translate(t.sx / 2, t.sy/2);
+    painter->rotate(-t.r);
+    painter->translate(-t.px,-t.py);
 }
 
 void Canvas::executeEnd()
