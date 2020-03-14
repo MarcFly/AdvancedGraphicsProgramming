@@ -46,6 +46,7 @@ void ECS::AddEntity(uint id, uint p_id)
         }
         else
         {
+            newE->p_id = p_id;
             newE->parent = entities[ent_ind];
             entities[ent_ind]->children.push_back(newE);
 
@@ -241,41 +242,25 @@ void ECS::onSaveFile(QString filename)
 
     QDataStream bytes(&write);
 
-    char* data = new char[sizeof(int)];
     int esize = entities.size();
-    memcpy(data, &esize, sizeof(int));
-
-    bytes.writeBytes(data, sizeof(uint));
-    delete[] data;
-    data = nullptr;
+    bytes << esize;
 
     for(uint i = 0; i < entities.size(); ++i)
     {
         Entity* e = entities[i];
         int n_size = e->name.length();
-        data = new char[const_e_size + n_size];
-
-        char* cursor = data;
 
         // Order: ID, PID, Transform, Brush(Style then Color), Pen(Width, Style, Color)
         // name , children ids
 
-        memcpy(cursor, &e->id, sizeof(uint));
-        cursor+=sizeof(uint);
+        bytes << e->id;
+        bytes << e->p_id;
 
-        memcpy(cursor, &e->p_id, sizeof(uint));
-        cursor += sizeof(uint);
-
-        memcpy(cursor, &e->drawData.t.px, sizeof(double));
-        cursor += sizeof(double);
-        memcpy(cursor, &e->drawData.t.py, sizeof(double));
-        cursor += sizeof(double);
-        memcpy(cursor, &e->drawData.t.sx, sizeof(double));
-        cursor += sizeof(double);
-        memcpy(cursor, &e->drawData.t.sy, sizeof(double));
-        cursor += sizeof(double);
-        memcpy(cursor, &e->drawData.t.r, sizeof(double));
-        cursor += sizeof(double);
+        bytes << e->drawData.t.px;
+        bytes << e->drawData.t.py;
+        bytes << e->drawData.t.sx;
+        bytes << e->drawData.t.sy;
+        bytes << e->drawData.t.r;
 
         int style = (int)e->drawData.fill.style();
         int r,g,b;
@@ -283,14 +268,10 @@ void ECS::onSaveFile(QString filename)
         g = e->drawData.fill.color().green();
         b = e->drawData.fill.color().blue();
 
-        memcpy(cursor, &style, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &r, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &g, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &b, sizeof(int));
-        cursor += sizeof(int);
+        bytes << style;
+        bytes << r;
+        bytes << g;
+        bytes << b;
 
         style = (int)e->drawData.outline.style();
         r = e->drawData.outline.color().red();
@@ -298,26 +279,14 @@ void ECS::onSaveFile(QString filename)
         b = e->drawData.outline.color().blue();
         int width = e->drawData.outline.width();
 
-        memcpy(cursor, &width, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &style, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &r, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &g, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, &b, sizeof(int));
-        cursor += sizeof(int);
+        bytes << width;
+        bytes << style;
+        bytes << r;
+        bytes << g;
+        bytes << b;
 
-        memcpy(cursor, &n_size, sizeof(int));
-        cursor += sizeof(int);
-        memcpy(cursor, e->name.c_str(), n_size);
-        cursor += n_size;
-
-        bytes.writeRawData(data, const_e_size + n_size);
-
-        delete[] data;
-        data = nullptr;
+        bytes << n_size;
+        bytes.writeRawData(e->name.c_str(), n_size+1);
     }
 
     write.close();
@@ -333,14 +302,8 @@ void ECS::onOpenFile(QString filename)
         read.open(QIODevice::ReadOnly);
         QDataStream bytes(&read);
 
-        char* data = new char[read.size()];
-        read.read(data, read.size());
-        int data_size = read.size();
-
-        char* cursor = data;
         uint e_size;
-        memcpy(&e_size, cursor, sizeof(uint));
-        cursor += sizeof(uint);
+        bytes >> e_size;
 
         for(uint i = 0; i < e_size; ++i)
         {
@@ -349,70 +312,50 @@ void ECS::onOpenFile(QString filename)
             // Order: ID, PID, Transform, Brush(Style then Color), Pen(Width, Style, Color)
             // name size, name
 
-            memcpy(&e->id, cursor, sizeof(uint));
-            cursor+=sizeof(uint);
+            bytes >> e->id;
+            bytes >> e->p_id;
 
-            memcpy(&e->p_id, cursor, sizeof(uint));
-            cursor += sizeof(uint);
-
-            memcpy(&e->drawData.t.px, cursor, sizeof(double));
-            cursor += sizeof(double);
-            memcpy(&e->drawData.t.py, cursor, sizeof(double));
-            cursor += sizeof(double);
-            memcpy(&e->drawData.t.sx, cursor, sizeof(double));
-            cursor += sizeof(double);
-            memcpy(&e->drawData.t.sy, cursor, sizeof(double));
-            cursor += sizeof(double);
-            memcpy(&e->drawData.t.r, cursor, sizeof(double));
-            cursor += sizeof(double);
+            bytes >> e->drawData.t.px;
+            bytes >> e->drawData.t.py;
+            bytes >> e->drawData.t.sx;
+            bytes >> e->drawData.t.sy;
+            bytes >> e->drawData.t.r;
 
             int style;
             int r,g,b;
 
-            memcpy(&style, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&r, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&g, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&b, cursor, sizeof(int));
-            cursor += sizeof(int);
+            bytes >> style;
+            bytes >> r;
+            bytes >> g;
+            bytes >> b;
 
             e->drawData.fill.setStyle((Qt::BrushStyle)style);
             e->drawData.fill.setColor(QColor(r,g,b));
 
             int width;
-
-            memcpy(&width, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&style, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&r, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&g, cursor, sizeof(int));
-            cursor += sizeof(int);
-            memcpy(&b, cursor, sizeof(int));
-            cursor += sizeof(int);
+            bytes >> width;
+            bytes >> style;
+            bytes >> r;
+            bytes >> g;
+            bytes >> b;
 
             e->drawData.outline.setWidth(width);
             e->drawData.outline.setStyle((Qt::PenStyle)style);
             e->drawData.outline.setColor(QColor(r,g,b));
 
             int n_size;
-            memcpy(&n_size, cursor, sizeof(int));
-            cursor += sizeof(int);
+            bytes >> n_size;
+            n_size +=1;
 
             char* str = new char[n_size];
-            memcpy(str, cursor, n_size);
-            cursor += n_size;
+            const uint nsize = n_size;
+            bytes.readRawData(str, nsize);
             e->name = std::string(str, n_size);
             delete[] str;
 
+
             entities.push_back(e);
         }
-
-        delete[] data;
-        data = nullptr;
 
         read.close();
     }
@@ -420,7 +363,11 @@ void ECS::onOpenFile(QString filename)
     for(uint i = 0; i < entities.size(); ++i)
     {
         uint p_ind = FindEntity(entities[i]->p_id);
-        if(p_ind != UINT_MAX) entities[i]->parent = entities[p_ind];
+        if(p_ind != UINT_MAX)
+        {
+            entities[i]->parent = entities[p_ind];
+            entities[p_ind]->children.push_back(entities[i]);
+        }
         else entities[i]->parent = nullptr;
     }
 

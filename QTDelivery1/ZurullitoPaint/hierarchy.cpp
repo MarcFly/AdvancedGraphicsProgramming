@@ -37,13 +37,13 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
 
     if(cur != nullptr)
-    entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
+    entitySelected(cur->data(0, Qt::DisplayRole).toUInt());
 
     // Issue, tree parenting is not updated when this is called
     if(prev != nullptr && !fromAR & !fromNF)
     {
         QTimer ss_t;
-        uint id = prev->data(1, Qt::DisplayRole).toUInt();
+        uint id = prev->data(0, Qt::DisplayRole).toUInt();
         //uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
 
         ss_t.singleShot(500, nullptr, [id, prev, this]
@@ -58,7 +58,8 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
         });
     }
 
-    fromAR = fromNF = false;
+    fromAR = false;
+    fromNF = false;
 
 
 }
@@ -95,8 +96,8 @@ void Hierarchy::onAdd()
     uint id = qrand();
 
     QTreeWidgetItem* new_item = new QTreeWidgetItem();
-    new_item->setData( 0, Qt::DisplayRole, QString("new_item_").append(std::to_string(itemcount).c_str()));
-    new_item->setData( 1, Qt::DisplayRole, id);
+    new_item->setData( 1, Qt::DisplayRole, QString("new_item_").append(std::to_string(itemcount).c_str()));
+    new_item->setData( 0, Qt::DisplayRole, id);
 
     QTreeWidgetItem* curr = ui->treeHierarchy->currentItem();
 
@@ -110,7 +111,7 @@ void Hierarchy::onAdd()
     else
     {
         curr->addChild(new_item);
-        AddEntity(id, curr->data(1, Qt::DisplayRole).toUInt());
+        AddEntity(id, curr->data(0, Qt::DisplayRole).toUInt());
     }
 
     ui->buttonAdd->setDisabled(true);
@@ -144,7 +145,7 @@ void Hierarchy::RecursiveRemove(QTreeWidgetItem* curr)
     while(curr->childCount() > 0)
         RecursiveRemove(curr->child(0));
 
-    RemoveEntity(curr->data(1, Qt::DisplayRole).toUInt());
+    RemoveEntity(curr->data(0, Qt::DisplayRole).toUInt());
     QTreeWidgetItem* p = curr->parent();
     if(p)
         p->removeChild(curr);
@@ -172,11 +173,13 @@ void Hierarchy::newFile()
 
 void Hierarchy::AddToHierarchy(uint id, uint p_id)
 {
+    itemcount++;
+
     QString text = QString::number(p_id);
     QList<QTreeWidgetItem*> items = ui->treeHierarchy->findItems( text, Qt::MatchExactly|Qt::MatchRecursive);
     QTreeWidgetItem* newE = new QTreeWidgetItem();
-    newE->setData(0, Qt::DisplayRole, QString("temp_name_").append(QString::number(itemcount)));
-    newE->setData(1, Qt::DisplayRole, id);
+    newE->setData(1, Qt::DisplayRole, QString("temp_name_").append(QString::number(itemcount)));
+    newE->setData(0, Qt::DisplayRole, id);
 
     if(items.size() > 0)
         items[0]->addChild(newE);
