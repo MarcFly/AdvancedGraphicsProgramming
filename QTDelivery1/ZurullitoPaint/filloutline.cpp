@@ -5,10 +5,12 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QColorDialog>
 
 //===================================================================
 canvasShow::canvasShow(bool is_fp, QWidget* parent) : QWidget(parent), fp(is_fp)
 {
+    cd = new QColorDialog();
     setAutoFillBackground(true);
     b = new QBrush();
     p = new QPen();
@@ -21,6 +23,7 @@ canvasShow::~canvasShow()
 {
     delete b;
     delete p;
+    delete cd;
 }
 
 QSize canvasShow::minimumSizeHint() const
@@ -31,6 +34,29 @@ QSize canvasShow::minimumSizeHint() const
 QSize canvasShow::sizeHint() const
 {
     return QSize(64,64);
+}
+
+void canvasShow::mousePressEvent(QMouseEvent *event)
+{
+    click = true;
+}
+
+void canvasShow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(click)
+    {
+        cd->open(this, SLOT(SetColor(const QColor&)));
+
+    }
+    click = false;
+}
+
+void canvasShow::SetColor(const QColor& rgb)
+{
+    b->setColor(rgb);
+    p->setColor(rgb);
+
+    sendUpdate();
 }
 
 void canvasShow::paintEvent(QPaintEvent *ev)
@@ -122,6 +148,8 @@ FillOutline::FillOutline(bool is_fp, QWidget *parent) : QWidget(parent)
     // Connect intern components
     connect(types, SIGNAL(currentIndexChanged(int)), this, SLOT(change_fp(int)));
 
+    connect(expo, SIGNAL(sendUpdate()), this, SIGNAL(sendUpdate()));
+
     connect(width, SIGNAL(valueChanged(int)), this, SLOT(change_pw(int)));
 }
 
@@ -172,5 +200,4 @@ void FillOutline::Update(const QBrush &b, const QPen &p)
 
 
 }
-
 

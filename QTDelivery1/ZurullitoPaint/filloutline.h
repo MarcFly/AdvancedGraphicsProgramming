@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QPen>
 
+class QColorDialog;
+
 class canvasShow: public QWidget
 {
     Q_OBJECT
@@ -15,20 +17,26 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 public:
     bool fp;
     QBrush* b;
     QPen* p;
+    bool click;
+    QColorDialog* cd;
 
-
+public slots:
+    void SetColor(const QColor& rgb);
 signals:
-    void Clicked();
-
+    void sendUpdate();
 };
 
 class QLabel;
 class QComboBox;
 class QSpinBox;
+
 
 class FillOutline : public QWidget
 {
