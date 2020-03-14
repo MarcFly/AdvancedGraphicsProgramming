@@ -7,7 +7,8 @@ Hierarchy::Hierarchy(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Hierarchy),
     itemcount(0),
-    fromAR(false)
+    fromAR(false),
+    fromNF(false)
 {
     ui->setupUi(this);
 
@@ -34,25 +35,33 @@ Hierarchy::~Hierarchy()
 }
 void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
-    if(cur != nullptr)
+    if(!fromNF)
+    {
+        if(cur != nullptr)
         entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
 
-    // Issue, tree parenting is not updated when this is called
-    if(prev != nullptr && !fromAR)
-    {    
-        QTimer ss_t;
-        uint id = prev->data(1, Qt::DisplayRole).toUInt();
-        uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
-
-        ss_t.singleShot(500, nullptr, [id, prev, this]
+        // Issue, tree parenting is not updated when this is called
+        if(prev != nullptr && !fromAR)
         {
-            uint p_id = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
-            uint pos = this->currItemPos(prev);
-            updateParenting(id, p_id, pos);
+            QTimer ss_t;
+            uint id = prev->data(1, Qt::DisplayRole).toUInt();
+            //uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
 
-        });
+            ss_t.singleShot(500, nullptr, [id, prev, this]
+            {
+                if(prev != nullptr)
+                {
+                    uint p_id = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
+                    uint pos = this->currItemPos(prev);
+                    updateParenting(id, p_id, pos);
+                }
+
+            });
+        }
+        fromAR = false;
     }
-    fromAR = false;
+    fromNF = false;
+
 }
 
 uint Hierarchy::currItemPos(QTreeWidgetItem* curr)
@@ -148,4 +157,13 @@ void Hierarchy::RecursiveRemove(QTreeWidgetItem* curr)
     delete curr;
     curr = nullptr;
     itemcount--;
+}
+
+void Hierarchy::newFile()
+{
+    fromNF = true;
+    while(ui->treeHierarchy->topLevelItemCount() > 0)
+    {
+        RecursiveRemove(ui->treeHierarchy->topLevelItem(0));
+    }
 }

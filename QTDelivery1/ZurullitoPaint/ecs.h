@@ -31,6 +31,9 @@ public slots:
     void updatedEntity(const uint id, const char* name, DrawStruct& drawData);
     void updateParenting(uint id, uint p_id, uint pos);
 
+    void onSaveFile(QString filename);
+    void onOpenFile(QString filename);
+
 signals:
     void askDraw(DrawStruct drawData);
     void callEnd();

@@ -30,7 +30,11 @@ struct Entity
 {
     Entity* parent = nullptr;
     std::vector<Entity*> children;
+
+    std::vector<uint> children_id; // load save purpose only
+
     uint id = UINT_MAX;
+    uint p_id = NULL;
 
     std::string name = "";
 

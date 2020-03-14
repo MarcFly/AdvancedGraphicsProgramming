@@ -21,10 +21,11 @@ private:
     Ui::MainWindow *ui;
     ECS* ecs;
 public slots:
-    //void onLoadFile(std::string file);
-    //void onSaveFile(std::string path);
+    void onOpenFile();
+    void onSaveFile();
 
 signals:
-
+    void askOpenFile(QString filename);
+    void askSaveFile(QString filename);
 };
 #endif // MAINWINDOW_H

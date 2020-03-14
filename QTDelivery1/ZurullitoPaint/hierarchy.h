@@ -27,11 +27,14 @@ private:
     uint itemcount;
     QTimer ar_block;
     bool fromAR;
+    bool fromNF;
 public slots:
     void onAdd();
     void onRemove();
     void currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev);
     void changedName(const char* name);
+    void newFile();
+
 signals:
     void AddEntity(uint id, uint parent_id);
     void RemoveEntity(uint id);
