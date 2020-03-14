@@ -18,6 +18,8 @@ public:
 
     void changeParent(Entity* e, uint p_id, uint pos);
 
+    void transformChildren(Entity* e, double px_delta, double py_delta, double r_delta, double px_par, double py_par);
+
 private:
     std::vector<Entity*> entities;
 

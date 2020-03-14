@@ -11,9 +11,9 @@ enum DrawShapes
 
 struct Transform
 {
-    int px = 0,py = 0;
-    float sx = 100,sy = 100;
-    int r = 45;
+    double px = 0,py = 0;
+    double sx = 100,sy = 100;
+    double r = 45;
 };
 
 #include <QPainter>

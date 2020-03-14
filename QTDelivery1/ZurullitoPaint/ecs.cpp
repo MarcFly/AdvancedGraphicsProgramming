@@ -1,4 +1,5 @@
 #include "ecs.h"
+#include <QtMath>
 
 ECS::ECS(QObject* parent) : QObject(parent)
 {
@@ -44,6 +45,7 @@ void ECS::AddEntity(uint id, uint p_id)
         else
         {
             newE->parent = entities[ent_ind];
+            entities[ent_ind]->children.push_back(newE);
 
             std::vector<Entity*> swap_v;
 
@@ -112,11 +114,19 @@ void ECS::updatedEntity(const uint id, const char* name, DrawStruct& drawData)
         e->name = name;
         changedName(e->name.c_str());
 
-        e->drawData.t.px = drawData.t.px;
-        e->drawData.t.py = drawData.t.py;
+        double px_delta, py_delta;
+        px_delta = drawData.t.px - e->drawData.t.px;
+        py_delta = drawData.t.py - e->drawData.t.py;
+        int r_delta = (drawData.t.r - e->drawData.t.r);
+
+        e->drawData.t.px += px_delta;
+        e->drawData.t.py += py_delta;
         e->drawData.t.sx = drawData.t.sx;
         e->drawData.t.sy = drawData.t.sy;
-        e->drawData.t.r = drawData.t.r;
+        e->drawData.t.r += r_delta;
+        double d_r_delta = qDegreesToRadians((double)r_delta);
+        for(uint i = 0; i < e->children.size(); ++i)
+            transformChildren(e->children[i], px_delta, py_delta, d_r_delta, e->drawData.t.px, e->drawData.t.py);
 
         e->drawData.fill = drawData.fill;
         e->drawData.shape = drawData.shape;
@@ -183,4 +193,21 @@ void ECS::changeParent(Entity *e, uint p_id, uint pos)
 
     }
 
+}
+
+
+void ECS::transformChildren(Entity *e, double px_delta, double py_delta, double r_delta, double px_par, double py_par)
+{
+    double vx = e->drawData.t.px - px_par;
+    double vy = e->drawData.t.py - py_par;
+
+    double dx = cos(r_delta)*vx - sin(r_delta)*vy;
+    double dy = sin(r_delta)*vx + cos(r_delta)*vy;
+
+    e->drawData.t.px = dx + px_par;
+    e->drawData.t.py = dy + py_par;
+    e->drawData.t.r += qRadiansToDegrees(r_delta);
+
+    for(uint i = 0; i < e->children.size(); ++i)
+        transformChildren(e->children[i], px_delta, py_delta, r_delta, px_par, py_par);
 }
