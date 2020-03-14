@@ -8,7 +8,10 @@ class QTextEdit;
 
 namespace Ui {
     class Transform;
+    class Shape;
 }
+
+class FillOutline;
 
 class Inspector : public QWidget
 {
@@ -20,15 +23,23 @@ public:
     void SetupTransform();
     void UpdateTransform(const Transform& t);
 
+    void SetupShape();
+    void UpdateShape(const DrawShapes& s);
+
+    void SetupFillOutline(bool is_fp);
+    void UpdateFill(const QBrush& b);
+    void UpdateOutline(const QPen& p);
+
 private:
     QTextEdit* uiName;
     Ui::Transform *uiTransform;
-//    Ui::Outline *uiOutline;
-//    Ui::Fill *uiFill;
-//    Ui::Shape *uiShape;
+    FillOutline *uiOutline;
+    FillOutline *uiFill;
+    Ui::Shape *uiShape;
 
     uint curr_id;
     bool updating;
+    QStringList strings;
 
 public slots:
     void updateEntity(const uint id, const char* name, const DrawStruct& drawData);

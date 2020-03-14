@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     canvas.cpp \
     ecs.cpp \
+    filloutline.cpp \
     hierarchy.cpp \
     inspector.cpp \
     main.cpp \
@@ -28,12 +29,14 @@ HEADERS += \
     Globals.h \
     canvas.h \
     ecs.h \
+    filloutline.h \
     hierarchy.h \
     inspector.h \
     mainwindow.h \
     test.h
 
 FORMS += \
+    Shape.ui \
     Transform.ui \
     hierarchy.ui \
     mainwindow.ui
