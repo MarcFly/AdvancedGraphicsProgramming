@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(hier, SIGNAL(entitySelected(uint)), ecs, SLOT(entitySelected(uint)));
     connect(hier, SIGNAL(updateParenting(uint,uint,uint)), ecs, SLOT(updateParenting(uint,uint,uint)));
     connect(ecs, SIGNAL(changedName(const char*)), hier, SLOT(changedName(const char*)));
+    connect(ecs, SIGNAL(SendToHierarchy(uint, uint)),hier, SLOT(AddToHierarchy(uint, uint)));
 
     // Connect MainWindow and Hierarchy
     connect(ui->actionNew, SIGNAL(triggered()), hier, SLOT(newFile()));

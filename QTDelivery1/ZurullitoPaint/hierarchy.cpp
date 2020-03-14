@@ -35,32 +35,31 @@ Hierarchy::~Hierarchy()
 }
 void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
-    if(!fromNF)
+
+    if(cur != nullptr)
+    entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
+
+    // Issue, tree parenting is not updated when this is called
+    if(prev != nullptr && !fromAR & !fromNF)
     {
-        if(cur != nullptr)
-        entitySelected(cur->data(1, Qt::DisplayRole).toUInt());
+        QTimer ss_t;
+        uint id = prev->data(1, Qt::DisplayRole).toUInt();
+        //uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
 
-        // Issue, tree parenting is not updated when this is called
-        if(prev != nullptr && !fromAR)
+        ss_t.singleShot(500, nullptr, [id, prev, this]
         {
-            QTimer ss_t;
-            uint id = prev->data(1, Qt::DisplayRole).toUInt();
-            //uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
-
-            ss_t.singleShot(500, nullptr, [id, prev, this]
+            if(prev != nullptr)
             {
-                if(prev != nullptr)
-                {
-                    uint p_id = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
-                    uint pos = this->currItemPos(prev);
-                    updateParenting(id, p_id, pos);
-                }
+                uint p_id = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
+                uint pos = this->currItemPos(prev);
+                updateParenting(id, p_id, pos);
+            }
 
-            });
-        }
-        fromAR = false;
+        });
     }
-    fromNF = false;
+
+    fromAR = fromNF = false;
+
 
 }
 
@@ -161,9 +160,29 @@ void Hierarchy::RecursiveRemove(QTreeWidgetItem* curr)
 
 void Hierarchy::newFile()
 {
-    fromNF = true;
+    fromNF  = true;
+    ui->treeHierarchy->clearSelection();
+    ui->treeHierarchy->setCurrentItem(nullptr);
+
     while(ui->treeHierarchy->topLevelItemCount() > 0)
     {
         RecursiveRemove(ui->treeHierarchy->topLevelItem(0));
     }
+}
+
+void Hierarchy::AddToHierarchy(uint id, uint p_id)
+{
+    QString text = QString::number(p_id);
+    QList<QTreeWidgetItem*> items = ui->treeHierarchy->findItems( text, Qt::MatchExactly|Qt::MatchRecursive);
+    QTreeWidgetItem* newE = new QTreeWidgetItem();
+    newE->setData(0, Qt::DisplayRole, QString("temp_name_").append(QString::number(itemcount)));
+    newE->setData(1, Qt::DisplayRole, id);
+
+    if(items.size() > 0)
+        items[0]->addChild(newE);
+    else
+    {
+        ui->treeHierarchy->addTopLevelItem(newE);
+    }
+
 }

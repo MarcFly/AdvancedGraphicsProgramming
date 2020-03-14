@@ -228,7 +228,7 @@ void ECS::onSaveFile(QString filename)
     // 1 x int for the width of pen
 
     // Constant definitions for variables
-    const_e_size += sizeof(int) * 2;
+    const_e_size += sizeof(int);
     // Size of children array, size of name
 
     if(QFile::exists(filename))
@@ -237,12 +237,15 @@ void ECS::onSaveFile(QString filename)
     }
 
     QFile write(filename);
-    write.open(QIODevice::Append);
+    write.open(QIODevice::WriteOnly);
+
+    QDataStream bytes(&write);
 
     char* data = new char[sizeof(int)];
     int esize = entities.size();
     memcpy(data, &esize, sizeof(int));
-    write.write(data, sizeof(int));
+
+    bytes.writeBytes(data, sizeof(uint));
     delete[] data;
     data = nullptr;
 
@@ -311,7 +314,7 @@ void ECS::onSaveFile(QString filename)
         memcpy(cursor, e->name.c_str(), n_size);
         cursor += n_size;
 
-        write.write(data,const_e_size + n_size);
+        bytes.writeRawData(data, const_e_size + n_size);
 
         delete[] data;
         data = nullptr;
@@ -328,9 +331,11 @@ void ECS::onOpenFile(QString filename)
 
         QFile read(filename);
         read.open(QIODevice::ReadOnly);
+        QDataStream bytes(&read);
 
         char* data = new char[read.size()];
         read.read(data, read.size());
+        int data_size = read.size();
 
         char* cursor = data;
         uint e_size;
@@ -410,5 +415,30 @@ void ECS::onOpenFile(QString filename)
         data = nullptr;
 
         read.close();
+    }
+
+    for(uint i = 0; i < entities.size(); ++i)
+    {
+        uint p_ind = FindEntity(entities[i]->p_id);
+        if(p_ind != UINT_MAX) entities[i]->parent = entities[p_ind];
+        else entities[i]->parent = nullptr;
+    }
+
+    for(uint i = 0; i < entities.size(); ++i)
+    {
+        if(entities[i]->p_id == NULL)
+            SendToHierarchy(entities[i]->id, NULL);
+        ChildSendToHierarchy(entities[i]);
+    }
+
+}
+
+void ECS::ChildSendToHierarchy(Entity* e)
+{
+
+    for(uint i = 0; i < e->children.size(); ++i)
+    {
+        SendToHierarchy(e->children[i]->id, e->id);
+        ChildSendToHierarchy(entities[i]);
     }
 }

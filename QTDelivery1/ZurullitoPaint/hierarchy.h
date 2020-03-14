@@ -34,6 +34,7 @@ public slots:
     void currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev);
     void changedName(const char* name);
     void newFile();
+    void AddToHierarchy(uint id, uint p_id);
 
 signals:
     void AddEntity(uint id, uint parent_id);
