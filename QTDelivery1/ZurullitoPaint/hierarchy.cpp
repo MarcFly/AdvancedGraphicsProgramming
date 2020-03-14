@@ -43,7 +43,7 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
     if(prev != nullptr && !fromAR & !fromNF)
     {
         QTimer ss_t;
-        uint id = prev->data(0, Qt::DisplayRole).toUInt();
+        uint id = prev->data(1, Qt::DisplayRole).toUInt();
         //uint tid = (prev->parent() == nullptr) ? NULL : prev->parent()->data(1, Qt::DisplayRole).toUInt();
 
         ss_t.singleShot(500, nullptr, [id, prev, this]

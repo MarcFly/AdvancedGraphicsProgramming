@@ -204,14 +204,16 @@ void ECS::changeParent(Entity *e, uint p_id, uint pos)
 
 void ECS::transformChildren(Entity *e, double px_delta, double py_delta, double r_delta, double px_par, double py_par)
 {
+
+
     double vx = e->drawData.t.px - px_par;
     double vy = e->drawData.t.py - py_par;
 
     double dx = cos(r_delta)*vx - sin(r_delta)*vy;
     double dy = sin(r_delta)*vx + cos(r_delta)*vy;
 
-    e->drawData.t.px = dx + px_par;
-    e->drawData.t.py = dy + py_par;
+    e->drawData.t.px = dx + px_par + px_delta;
+    e->drawData.t.py = dy + py_par + py_delta;
     e->drawData.t.r += qRadiansToDegrees(r_delta);
 
     for(uint i = 0; i < e->children.size(); ++i)
