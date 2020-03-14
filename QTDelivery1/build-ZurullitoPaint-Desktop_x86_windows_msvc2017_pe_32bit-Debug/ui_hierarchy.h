@@ -96,8 +96,8 @@ public:
     {
         Hierarchy->setWindowTitle(QCoreApplication::translate("Hierarchy", "Form", nullptr));
         QTreeWidgetItem *___qtreewidgetitem = treeHierarchy->headerItem();
-        ___qtreewidgetitem->setText(1, QCoreApplication::translate("Hierarchy", "ID", nullptr));
-        ___qtreewidgetitem->setText(0, QCoreApplication::translate("Hierarchy", "SCENE", nullptr));
+        ___qtreewidgetitem->setText(1, QCoreApplication::translate("Hierarchy", "NAME", nullptr));
+        ___qtreewidgetitem->setText(0, QCoreApplication::translate("Hierarchy", "SCENE ID", nullptr));
         buttonAdd->setText(QCoreApplication::translate("Hierarchy", "Add", nullptr));
         buttonRemove->setText(QCoreApplication::translate("Hierarchy", "Remove", nullptr));
     } // retranslateUi

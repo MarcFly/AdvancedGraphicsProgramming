@@ -84,7 +84,7 @@ uint Hierarchy::currItemPos(QTreeWidgetItem* curr)
 
 void Hierarchy::changedName(const char* name)
 {
-    ui->treeHierarchy->currentItem()->setData(0, Qt::DisplayRole, QString(name));
+    ui->treeHierarchy->currentItem()->setData(1, Qt::DisplayRole, QString(name));
 }
 
 void Hierarchy::onAdd()

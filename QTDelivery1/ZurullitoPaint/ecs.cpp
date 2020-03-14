@@ -127,6 +127,9 @@ void ECS::updatedEntity(const uint id, const char* name, DrawStruct& drawData)
         e->drawData.t.sx = drawData.t.sx;
         e->drawData.t.sy = drawData.t.sy;
         e->drawData.t.r += r_delta;
+        if(e->drawData.t.r > 360) e->drawData.t.r -= 360;
+        if(e->drawData.t.r < 0) e->drawData.t.r += 360;
+
         double d_r_delta = qDegreesToRadians((double)r_delta);
         for(uint i = 0; i < e->children.size(); ++i)
             transformChildren(e->children[i], px_delta, py_delta, d_r_delta, e->drawData.t.px, e->drawData.t.py);
@@ -215,6 +218,9 @@ void ECS::transformChildren(Entity *e, double px_delta, double py_delta, double 
     e->drawData.t.px = dx + px_par + px_delta;
     e->drawData.t.py = dy + py_par + py_delta;
     e->drawData.t.r += qRadiansToDegrees(r_delta);
+
+    if(e->drawData.t.r > 360) e->drawData.t.r -= 360;
+    if(e->drawData.t.r < 0) e->drawData.t.r += 360;
 
     for(uint i = 0; i < e->children.size(); ++i)
         transformChildren(e->children[i], px_delta, py_delta, r_delta, px_par, py_par);
@@ -376,8 +382,10 @@ void ECS::onOpenFile(QString filename)
     for(uint i = 0; i < entities.size(); ++i)
     {
         if(entities[i]->p_id == NULL)
+        {
             SendToHierarchy(entities[i]->id, NULL);
-        ChildSendToHierarchy(entities[i]);
+            ChildSendToHierarchy(entities[i]);
+        }
     }
 
 }
@@ -388,6 +396,6 @@ void ECS::ChildSendToHierarchy(Entity* e)
     for(uint i = 0; i < e->children.size(); ++i)
     {
         SendToHierarchy(e->children[i]->id, e->id);
-        ChildSendToHierarchy(entities[i]);
+        ChildSendToHierarchy(e->children[i]);
     }
 }

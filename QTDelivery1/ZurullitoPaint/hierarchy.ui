@@ -21,7 +21,7 @@
      </property>
      <column>
       <property name="text">
-       <string>SCENE</string>
+       <string>SCENE ID</string>
       </property>
       <property name="font">
        <font>
@@ -58,7 +58,7 @@
      </column>
      <column>
       <property name="text">
-       <string>ID</string>
+       <string>NAME</string>
       </property>
       <property name="font">
        <font>
