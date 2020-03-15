@@ -60,6 +60,8 @@ public slots:
     void updatedEntity(const uint id, const char* name, DrawStruct& drawData);
     void updateParenting(uint id, uint p_id, uint pos);
 
+    void MousePick(int x, int y);
+
     void onSaveFile(QString filename);
     void onOpenFile(QString filename);
 
@@ -70,6 +72,7 @@ signals:
     void selectedEntity(const uint id, const char* name, const DrawStruct& drawData);
     void changedName(const char* name);
     void SendToHierarchy(uint id, uint p_id);
+    void MousePickSelect(uint id);
 };
 
 #endif // ECS_H

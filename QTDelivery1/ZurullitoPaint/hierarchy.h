@@ -36,6 +36,7 @@ public slots:
     void changedName(const char* name);
     void newFile();
     void AddToHierarchy(uint id, uint p_id);
+    void MousePickSelect(uint id);
 
 signals:
     void AddEntity(uint id, uint parent_id);

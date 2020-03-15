@@ -42,8 +42,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(hier, SIGNAL(RemoveEntity(uint)), ecs, SLOT(RemoveEntity(uint)));
     connect(hier, SIGNAL(entitySelected(uint)), ecs, SLOT(entitySelected(uint)));
     connect(hier, SIGNAL(updateParenting(uint,uint,uint)), ecs, SLOT(updateParenting(uint,uint,uint)));
+
     connect(ecs, SIGNAL(changedName(const char*)), hier, SLOT(changedName(const char*)));
     connect(ecs, SIGNAL(SendToHierarchy(uint, uint)),hier, SLOT(AddToHierarchy(uint, uint)));
+    connect(ecs, SIGNAL(MousePickSelect(uint)), hier, SLOT(MousePickSelect(uint)));
 
     // Connect Inspector and Hierarhcy signals and slots
     connect(hier, SIGNAL(SelectionCleared()), insp, SLOT(NoSelection()));
@@ -61,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ecs, SIGNAL(callEnd()), wcanvas, SLOT(executeEnd()));
     connect(ecs, SIGNAL(callRePaint()), wcanvas, SLOT(RePaint()));
 
+    connect(wcanvas, SIGNAL(Clicked(int, int)), ecs, SLOT(MousePick(int, int)));
     connect(wcanvas, SIGNAL(CallDraw()), ecs, SLOT(executeDraw()));
 }
 

@@ -37,7 +37,11 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
 
     if(cur != nullptr)
-    entitySelected(cur->data(0, Qt::DisplayRole).toUInt());
+        entitySelected(cur->data(0, Qt::DisplayRole).toUInt());
+    else
+    {
+        SelectionCleared();
+    }
 
     // Issue, tree parenting is not updated when this is called
     if(prev != nullptr && !fromAR & !fromNF)
@@ -189,4 +193,11 @@ void Hierarchy::AddToHierarchy(uint id, uint p_id)
         ui->treeHierarchy->addTopLevelItem(newE);
     }
 
+}
+
+void Hierarchy::MousePickSelect(uint id)
+{
+    QString text = QString::number(id);
+    QList<QTreeWidgetItem*> items = ui->treeHierarchy->findItems( text, Qt::MatchExactly|Qt::MatchRecursive);
+    ui->treeHierarchy->setCurrentItem(items[0]);
 }

@@ -16,10 +16,13 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     QPainter* painter;
     bool allowBegin;
+    bool tracking_pos;
 signals:
     void Clicked(int x, int y);
     void Mouse(int x, int y);

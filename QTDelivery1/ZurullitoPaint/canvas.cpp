@@ -1,11 +1,12 @@
 #include "canvas.h"
-
+#include <QMouseEvent>
 
 Canvas::Canvas(QWidget *parent) : QWidget(parent)
 {
     setAutoFillBackground(true);
     painter = new QPainter(this);
     allowBegin = true;
+    tracking_pos = false;
 }
 
 Canvas::~Canvas()
@@ -20,7 +21,29 @@ QSize Canvas::sizeHint() const
 
 QSize Canvas::minimumSizeHint() const
 {
-    return QSize(64,64); // this returns expected size
+    return QSize(64,64); // this returns minimum size
+}
+
+void Canvas::mousePressEvent(QMouseEvent *event)
+{
+    int x = event->x();
+    int y = event->y();
+    int wx = this->x();
+    int wy = this->y();
+    int ww = wx + this->size().width();
+    int wh = wy + this->size().height();
+
+    if(x >= wx && x <= ww && y >+ wy && y <= wh)
+    {
+        tracking_pos = true;
+        Clicked(event->x(), event->y());
+    }
+
+}
+void Canvas::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(tracking_pos) Release(event->x(), event->y());
+    tracking_pos = false;
 }
 
 void Canvas::paintEvent(QPaintEvent* ev)
