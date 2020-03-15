@@ -37,7 +37,11 @@ void Hierarchy::currItemChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev)
 {
 
     if(cur != nullptr)
-    entitySelected(cur->data(0, Qt::DisplayRole).toUInt());
+        entitySelected(cur->data(0, Qt::DisplayRole).toUInt());
+    else
+    {
+        SelectionCleared();
+    }
 
     // Issue, tree parenting is not updated when this is called
     if(prev != nullptr && !fromAR & !fromNF)

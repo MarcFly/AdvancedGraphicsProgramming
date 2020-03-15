@@ -28,6 +28,7 @@ private:
     QTimer ar_block;
     bool fromAR;
     bool fromNF;
+
 public slots:
     void onAdd();
     void onRemove();
@@ -41,6 +42,7 @@ signals:
     void RemoveEntity(uint id);
     void entitySelected(uint id);
     void updateParenting(uint id, uint p_id, uint pos);
+    void SelectionCleared();
 };
 
 #endif // HIERARCHY_H

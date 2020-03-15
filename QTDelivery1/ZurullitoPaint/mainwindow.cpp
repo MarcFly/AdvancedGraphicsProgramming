@@ -45,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ecs, SIGNAL(changedName(const char*)), hier, SLOT(changedName(const char*)));
     connect(ecs, SIGNAL(SendToHierarchy(uint, uint)),hier, SLOT(AddToHierarchy(uint, uint)));
 
+    // Connect Inspector and Hierarhcy signals and slots
+    connect(hier, SIGNAL(SelectionCleared()), insp, SLOT(NoSelection()));
+
     // Connect MainWindow and Hierarchy
     connect(ui->actionNew, SIGNAL(triggered()), hier, SLOT(newFile()));
 

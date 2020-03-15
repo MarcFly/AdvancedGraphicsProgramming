@@ -44,6 +44,7 @@ private:
 public slots:
     void updateEntity(const uint id, const char* name, const DrawStruct& drawData);
     void sendUpdate();
+    void NoSelection();
 signals:
     void UpdatedEntity(const uint id, const char* name, DrawStruct& drawData);
 };

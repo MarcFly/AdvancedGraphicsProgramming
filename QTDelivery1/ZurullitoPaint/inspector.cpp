@@ -79,6 +79,8 @@ Inspector::Inspector(QWidget *parent) :
 
     // Set widget layout to the one we have created
     setLayout(layout);
+
+    hide();
 }
 
 Inspector::~Inspector()
@@ -94,6 +96,8 @@ Inspector::~Inspector()
 void Inspector::updateEntity(const uint id, const char* name,const DrawStruct& drawData)
 {
     updating = true;
+
+    show();
 
     curr_id = id;
     uiName->setText(QString(name));
@@ -213,6 +217,11 @@ void Inspector::SetupFillOutline(bool is_fp)
     {}
     else
     {}
+}
+
+void Inspector::NoSelection()
+{
+    hide();
 }
 
 //===================================================
