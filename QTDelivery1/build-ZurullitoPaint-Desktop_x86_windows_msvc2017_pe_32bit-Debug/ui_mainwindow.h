@@ -28,6 +28,7 @@ public:
     QAction *actionNew;
     QAction *actionOpen;
     QAction *actionSave;
+    QAction *actionRender;
     QWidget *centralwidget;
     QMenuBar *menubar;
     QMenu *menuFile;
@@ -59,6 +60,11 @@ public:
         QIcon icon2;
         icon2.addFile(QString::fromUtf8(":/icons/Disquette.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSave->setIcon(icon2);
+        actionRender = new QAction(MainWindow);
+        actionRender->setObjectName(QString::fromUtf8("actionRender"));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/icons/Picture.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRender->setIcon(icon3);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -94,9 +100,11 @@ public:
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
+        menuEdit->addAction(actionRender);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
+        toolBar->addAction(actionRender);
 
         retranslateUi(MainWindow);
 
@@ -109,8 +117,12 @@ public:
         actionNew->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
         actionOpen->setText(QCoreApplication::translate("MainWindow", "Open", nullptr));
         actionSave->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
+        actionRender->setText(QCoreApplication::translate("MainWindow", "Render", nullptr));
+#if QT_CONFIG(tooltip)
+        actionRender->setToolTip(QCoreApplication::translate("MainWindow", "Render to Image File", nullptr));
+#endif // QT_CONFIG(tooltip)
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
-        menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
+        menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Render", nullptr));
         dockHierarchy->setWindowTitle(QCoreApplication::translate("MainWindow", "Hierarchy", nullptr));
         dockInspector->setWindowTitle(QCoreApplication::translate("MainWindow", "Inspector", nullptr));
         toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));

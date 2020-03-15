@@ -24,6 +24,9 @@ Hierarchy::Hierarchy(QWidget *parent) :
     // Connect the signals and slots from the buttons to functions to add thigngs
     connect(ui->buttonAdd, SIGNAL(clicked()), this, SLOT(onAdd()));
     connect(ui->buttonRemove, SIGNAL(clicked()), this, SLOT(onRemove()));
+
+    ui->treeHierarchy->clearSelection();
+    SelectionCleared();
 }
 
 Hierarchy::~Hierarchy()
@@ -197,6 +200,12 @@ void Hierarchy::AddToHierarchy(uint id, uint p_id)
 
 void Hierarchy::MousePickSelect(uint id)
 {
+    if(id == UINT_MAX)
+    {
+        ui->treeHierarchy->clearSelection();
+        ui->treeHierarchy->setCurrentItem(nullptr);
+        return;
+    }
     QString text = QString::number(id);
     QList<QTreeWidgetItem*> items = ui->treeHierarchy->findItems( text, Qt::MatchExactly|Qt::MatchRecursive);
     ui->treeHierarchy->setCurrentItem(items[0]);

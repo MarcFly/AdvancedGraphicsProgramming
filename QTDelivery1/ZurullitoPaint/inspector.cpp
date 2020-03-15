@@ -224,5 +224,11 @@ void Inspector::NoSelection()
     hide();
 }
 
+void Inspector::MouseMove(int dx, int dy)
+{
+    uiTransform->PX->setValue(uiTransform->PX->value() + dx);
+    uiTransform->PY->setValue(uiTransform->PY->value() + dy);
+}
+
 //===================================================
 //===================================================

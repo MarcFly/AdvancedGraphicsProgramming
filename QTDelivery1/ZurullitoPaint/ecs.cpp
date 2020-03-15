@@ -445,6 +445,8 @@ void ECS::ChildSendToHierarchy(Entity* e)
 
 void ECS::MousePick(int x, int y)
 {
+    uint check = UINT_MAX;
+
     for(uint i = 0; i < entities.size(); ++i)
     {
         int vx, vy;
@@ -465,9 +467,12 @@ void ECS::MousePick(int x, int y)
 
         if(realx >= x1 && realx <= x2 && realy >= y1 && realy <= y2)
         {
+            check = 0;
             MousePickSelect(entities[i]->id);
             break;
         }
 
     }
+
+    if(check == UINT_MAX) MousePickSelect(UINT_MAX);
 }

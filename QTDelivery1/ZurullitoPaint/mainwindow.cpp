@@ -58,13 +58,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->centralwidget->setLayout(new QVBoxLayout());
     ui->centralwidget->layout()->addWidget(wcanvas);
 
+    // Connect Main Window and Canvas
+    connect(ui->actionRender, SIGNAL(triggered()), wcanvas, SLOT(Render()));
+
     // Connect ecs and canvas draw signals and slots
     connect(ecs, SIGNAL(askDraw(DrawStruct)), wcanvas, SLOT(drawEntity(DrawStruct)));
     connect(ecs, SIGNAL(callEnd()), wcanvas, SLOT(executeEnd()));
     connect(ecs, SIGNAL(callRePaint()), wcanvas, SLOT(RePaint()));
 
+    connect(ecs, SIGNAL(MousePickSelect(uint)), wcanvas, SLOT(PickedEntity(uint)));
     connect(wcanvas, SIGNAL(Clicked(int, int)), ecs, SLOT(MousePick(int, int)));
     connect(wcanvas, SIGNAL(CallDraw()), ecs, SLOT(executeDraw()));
+
+    // Connect canvas and inspector
+    connect(wcanvas, SIGNAL(Mouse(int, int)), insp, SLOT(MouseMove(int, int)));
+
+
 }
 
 MainWindow::~MainWindow()
@@ -79,6 +88,9 @@ void MainWindow::onOpenFile()
                 "Open a scene file",
                 "./",
                 "AWOOGA file (*.awooga)");
+
+    ui->actionNew->triggered();
+
     if(!filename.isEmpty())
         askOpenFile(filename);
 }

@@ -45,6 +45,7 @@ public slots:
     void updateEntity(const uint id, const char* name, const DrawStruct& drawData);
     void sendUpdate();
     void NoSelection();
+    void MouseMove(int dx, int dy);
 signals:
     void UpdatedEntity(const uint id, const char* name, DrawStruct& drawData);
 };

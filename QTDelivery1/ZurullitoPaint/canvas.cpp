@@ -1,5 +1,6 @@
 #include "canvas.h"
 #include <QMouseEvent>
+#include <QFileDialog>
 
 Canvas::Canvas(QWidget *parent) : QWidget(parent)
 {
@@ -7,6 +8,8 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent)
     painter = new QPainter(this);
     allowBegin = true;
     tracking_pos = false;
+    //painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    render = nullptr;
 }
 
 Canvas::~Canvas()
@@ -36,10 +39,23 @@ void Canvas::mousePressEvent(QMouseEvent *event)
     if(x >= wx && x <= ww && y >+ wy && y <= wh)
     {
         tracking_pos = true;
-        Clicked(event->x(), event->y());
+        Clicked(x, y);
+        oldx = x;
+        oldy = y;
     }
 
 }
+
+void Canvas::mouseMoveEvent(QMouseEvent *event)
+{
+    if(tracking_pos)
+    {
+        Mouse(event->x() -oldx, event->y() - oldy);
+        oldx = event->x();
+        oldy = event->y();
+    }
+}
+
 void Canvas::mouseReleaseEvent(QMouseEvent *event)
 {
     if(tracking_pos) Release(event->x(), event->y());
@@ -60,43 +76,74 @@ void Canvas::paintEvent(QPaintEvent* ev)
         painter->setPen(QPen(Qt::PenStyle::NoPen));
         painter->drawRect(rect());
 
+        trender = false;
         CallDraw();
     }
 }
 
 void Canvas::drawEntity(const DrawStruct& drawData)
 {
-    painter->setPen(drawData.outline);
-    painter->setBrush(drawData.fill);
+    QPainter* p = painter;
+    if(trender) p = render;
+
+    p->setPen(drawData.outline);
+    p->setBrush(drawData.fill);
 
     const Transform& t = drawData.t;
 
-    painter->translate(t.px, t.py);
-    painter->rotate(t.r);
-    painter->translate(- t.sx / 2,- t.sy/2);
+    p->translate(t.px, t.py);
+    p->rotate(t.r);
+    p->translate(- t.sx / 2,- t.sy/2);
 
     switch(drawData.shape)
     {
     case DrawShapes::BG:
         break;
     case DrawShapes::Circle:
-        painter->drawEllipse(0, 0, t.sx, t.sy);
+        p->drawEllipse(0, 0, t.sx, t.sy);
         break;
     case DrawShapes::Box:
-        painter->drawRect(0, 0, t.sx, t.sy);
+        p->drawRect(0, 0, t.sx, t.sy);
         break;
     case DrawShapes::Line:
-        painter->drawLine(0, 0, t.sx, t.sy);
+        p->drawLine(0, 0, t.sx, t.sy);
         break;
     }
 
-    painter->translate(t.sx / 2, t.sy/2);
-    painter->rotate(-t.r);
-    painter->translate(-t.px,-t.py);
+    p->translate(t.sx / 2, t.sy/2);
+    p->rotate(-t.r);
+    p->translate(-t.px,-t.py);
 }
 
 void Canvas::executeEnd()
 {
-    painter->end();
+    if(allowBegin == false)
+        painter->end();
     allowBegin = true;
+}
+
+void Canvas::Render()
+{
+    QString filename = QFileDialog::getSaveFileName(
+                this,
+                "Save Image File",
+                "./",
+                "PNG (*.png);;JPG (*.jpg)");
+
+    QImage img(this->size(), QImage::Format_ARGB32);
+    render = new QPainter(&img);
+    render->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    trender = true;
+    CallDraw();
+    trender = false;
+    render->end();
+    delete render;
+    render = nullptr;
+
+    img.save(filename);
+}
+
+void Canvas::PickedEntity(uint id)
+{
+    if(id == UINT_MAX) tracking_pos = false;
 }
