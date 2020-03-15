@@ -23,6 +23,7 @@ private:
 public slots:
     void onOpenFile();
     void onSaveFile();
+    void onExit();
 
 signals:
     void askOpenFile(QString filename);

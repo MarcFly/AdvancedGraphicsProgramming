@@ -9,6 +9,7 @@
 #include "Globals.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
     connect(this, SIGNAL(askSaveFile(QString)), ecs, SLOT(onSaveFile(QString)));
     connect(this, SIGNAL(askOpenFile(QString)), ecs, SLOT(onOpenFile(QString)));
-
+    connect(ui->actionEXIT, SIGNAL(triggered()), this, SLOT(onExit()));
 
     // Linking Inspector Widget to Inspector Dock
     Inspector* insp = new Inspector();
@@ -105,4 +106,33 @@ void MainWindow::onSaveFile()
 
     if(!filename.isEmpty())
         askSaveFile(filename);
+}
+
+void MainWindow::onExit()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Before closing, do you want to save your scene?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    bool tclose = true;
+
+    switch(ret)
+    {
+    case QMessageBox::Save:
+        onSaveFile();
+        tclose = true;
+        break;
+    case QMessageBox::Cancel:
+        tclose = false;
+        break;
+    case QMessageBox::Discard:
+        tclose = true;
+        break;
+    }
+
+    if(tclose)
+    {
+        close();
+    }
 }

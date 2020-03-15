@@ -30,6 +30,7 @@ public:
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionRender;
+    QAction *actionEXIT;
     QWidget *centralwidget;
     QMenuBar *menubar;
     QMenu *menuFile;
@@ -69,6 +70,11 @@ public:
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/icons/Picture.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRender->setIcon(icon4);
+        actionEXIT = new QAction(MainWindow);
+        actionEXIT->setObjectName(QString::fromUtf8("actionEXIT"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/icons/Signal attention.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionEXIT->setIcon(icon5);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -104,11 +110,16 @@ public:
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
+        menuFile->addSeparator();
+        menuFile->addAction(actionEXIT);
         menuEdit->addAction(actionRender);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
+        toolBar->addSeparator();
         toolBar->addAction(actionRender);
+        toolBar->addSeparator();
+        toolBar->addAction(actionEXIT);
 
         retranslateUi(MainWindow);
 
@@ -125,6 +136,7 @@ public:
 #if QT_CONFIG(tooltip)
         actionRender->setToolTip(QCoreApplication::translate("MainWindow", "Render to Image File", nullptr));
 #endif // QT_CONFIG(tooltip)
+        actionEXIT->setText(QCoreApplication::translate("MainWindow", "EXIT", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Render", nullptr));
         dockHierarchy->setWindowTitle(QCoreApplication::translate("MainWindow", "Hierarchy", nullptr));

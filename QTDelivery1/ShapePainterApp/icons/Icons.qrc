@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>camera.png</file>
         <file>Disquette.png</file>
         <file>Empty document new.png</file>
         <file>Folder.png</file>

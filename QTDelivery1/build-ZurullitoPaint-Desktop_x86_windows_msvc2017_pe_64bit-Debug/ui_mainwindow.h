@@ -10,6 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDockWidget>
@@ -29,6 +30,7 @@ public:
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionRender;
+    QAction *actionEXIT;
     QWidget *centralwidget;
     QMenuBar *menubar;
     QMenu *menuFile;
@@ -45,26 +47,34 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(800, 600);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/zurullito.png"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/icons/Empty document new.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionNew->setIcon(icon);
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/icons/Empty document new.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNew->setIcon(icon1);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/icons/Folder.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionOpen->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/icons/Folder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen->setIcon(icon2);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/icons/Disquette.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSave->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/icons/Disquette.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave->setIcon(icon3);
         actionRender = new QAction(MainWindow);
         actionRender->setObjectName(QString::fromUtf8("actionRender"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/icons/Picture.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRender->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/icons/Picture.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRender->setIcon(icon4);
+        actionEXIT = new QAction(MainWindow);
+        actionEXIT->setObjectName(QString::fromUtf8("actionEXIT"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/icons/Signal attention.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionEXIT->setIcon(icon5);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -100,11 +110,16 @@ public:
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
+        menuFile->addSeparator();
+        menuFile->addAction(actionEXIT);
         menuEdit->addAction(actionRender);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
+        toolBar->addSeparator();
         toolBar->addAction(actionRender);
+        toolBar->addSeparator();
+        toolBar->addAction(actionEXIT);
 
         retranslateUi(MainWindow);
 
@@ -121,6 +136,7 @@ public:
 #if QT_CONFIG(tooltip)
         actionRender->setToolTip(QCoreApplication::translate("MainWindow", "Render to Image File", nullptr));
 #endif // QT_CONFIG(tooltip)
+        actionEXIT->setText(QCoreApplication::translate("MainWindow", "EXIT", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Render", nullptr));
         dockHierarchy->setWindowTitle(QCoreApplication::translate("MainWindow", "Hierarchy", nullptr));

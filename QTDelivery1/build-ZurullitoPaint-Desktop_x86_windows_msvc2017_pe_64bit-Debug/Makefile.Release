@@ -19,7 +19,7 @@ CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStri
 INCPATH       = -I..\ZurullitoPaint -I. -IC:\Qt\5.14.1\msvc2017_64\include -IC:\Qt\5.14.1\msvc2017_64\include\QtWidgets -IC:\Qt\5.14.1\msvc2017_64\include\QtGui -IC:\Qt\5.14.1\msvc2017_64\include\QtANGLE -IC:\Qt\5.14.1\msvc2017_64\include\QtCore -Irelease -I. -IC:\VulkanSDK\1.1.121.2\include -IC:\Qt\5.14.1\msvc2017_64\mkspecs\win32-msvc 
 LINKER        = link
 LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /OPT:REF /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = C:\Qt\5.14.1\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Core.lib  C:\Qt\5.14.1\msvc2017_64\lib\qtmain.lib /LIBPATH:C:\openssl\lib /LIBPATH:C:\Utils\my_sql\mysql-5.7.25-winx64\lib /LIBPATH:C:\Utils\postgresql\pgsql\lib shell32.lib 
+LIBS          = C:\Qt\5.14.1\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Core.lib release\ZurullitoPaint_resource.res  C:\Qt\5.14.1\msvc2017_64\lib\qtmain.lib /LIBPATH:C:\openssl\lib /LIBPATH:C:\Utils\my_sql\mysql-5.7.25-winx64\lib /LIBPATH:C:\Utils\postgresql\pgsql\lib shell32.lib 
 QMAKE         = C:\Qt\5.14.1\msvc2017_64\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -40,7 +40,7 @@ IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = release\ZurullitoPaint_resource.res
 SED           = $(QMAKE) -install sed
 MOVE          = move
 
@@ -171,11 +171,14 @@ DESTDIR_TARGET = release\ZurullitoPaint.exe
 first: all
 all: Makefile.Release  release\ZurullitoPaint.exe
 
-release\ZurullitoPaint.exe: C:\Qt\5.14.1\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Core.lib C:\Qt\5.14.1\msvc2017_64\lib\qtmain.lib ui_Shape.h ui_Transform.h ui_hierarchy.h ui_mainwindow.h $(OBJECTS) 
+release\ZurullitoPaint.exe: C:\Qt\5.14.1\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.14.1\msvc2017_64\lib\Qt5Core.lib C:\Qt\5.14.1\msvc2017_64\lib\qtmain.lib ui_Shape.h ui_Transform.h ui_hierarchy.h ui_mainwindow.h $(OBJECTS) release\ZurullitoPaint_resource.res
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
 release\canvas.obj release\ecs.obj release\filloutline.obj release\hierarchy.obj release\inspector.obj release\main.obj release\mainwindow.obj release\test.obj release\qrc_Icons.obj release\moc_canvas.obj release\moc_ecs.obj release\moc_filloutline.obj release\moc_hierarchy.obj release\moc_inspector.obj release\moc_mainwindow.obj release\moc_test.obj
 $(LIBS)
 <<
+
+release\ZurullitoPaint_resource.res: ZurullitoPaint_resource.rc
+	rc /NOLOGO $(DEFINES) -fo release\ZurullitoPaint_resource.res ZurullitoPaint_resource.rc
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Release ..\ZurullitoPaint\ZurullitoPaint.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -187,6 +190,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) release\canvas.obj release\ecs.obj release\filloutline.obj release\hierarchy.obj release\inspector.obj release\main.obj release\mainwindow.obj release\test.obj release\qrc_Icons.obj release\moc_canvas.obj release\moc_ecs.obj release\moc_filloutline.obj release\moc_hierarchy.obj release\moc_inspector.obj release\moc_mainwindow.obj release\moc_test.obj
+	-$(DEL_FILE) release\ZurullitoPaint_resource.res
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -208,12 +212,12 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_Icons.cpp
 release\qrc_Icons.cpp: ..\ShapePainterApp\icons\Icons.qrc \
 		C:\Qt\5.14.1\msvc2017_64\bin\rcc.exe \
-		..\ShapePainterApp\icons\camera.png \
 		..\ShapePainterApp\icons\Picture.png \
 		"..\ShapePainterApp\icons\Orb plus.png" \
 		..\ShapePainterApp\icons\Disquette.png \
 		"..\ShapePainterApp\icons\Orb minus.png" \
 		"..\ShapePainterApp\icons\Signal attention.png" \
+		..\ShapePainterApp\icons\zurullito.png \
 		"..\ShapePainterApp\icons\Empty document new.png" \
 		..\ShapePainterApp\icons\Folder.png
 	C:\Qt\5.14.1\msvc2017_64\bin\rcc.exe -name Icons ..\ShapePainterApp\icons\Icons.qrc -o release\qrc_Icons.cpp
@@ -1436,6 +1440,47 @@ release\hierarchy.obj: ..\ZurullitoPaint\hierarchy.cpp ..\ZurullitoPaint\hierarc
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qtimer.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qbasictimer.h \
 		ui_hierarchy.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\QVariant \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\QIcon \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qicon.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QApplication \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qeventloop.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qguiapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QHBoxLayout \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qboxlayout.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qlayout.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qlayoutitem.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qgridlayout.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QHeaderView \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qframe.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qvalidator.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qregularexpression.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qslider.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qstyle.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QPushButton \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QTreeWidget \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtreewidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtreeview.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtreewidgetitemiterator.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\QDateTime \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qdatetime.h
 
@@ -1549,19 +1594,52 @@ release\inspector.obj: ..\ZurullitoPaint\inspector.cpp ..\ZurullitoPaint\inspect
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qpainter.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qtextoption.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qpen.h \
-		ui_Shape.h \
-		..\ZurullitoPaint\filloutline.h \
-		C:\Qt\5.14.1\msvc2017_64\include\QtGui\QPen \
-		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QVBoxLayout \
+		ui_transform.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\QVariant \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QApplication \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qeventloop.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qguiapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QDial \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdial.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QDoubleSpinBox \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qspinbox.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qvalidator.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qregularexpression.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QFrame \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qframe.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QHBoxLayout \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qboxlayout.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qlayout.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qlayoutitem.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qgridlayout.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QLabel \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qlabel.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QSpacerItem \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QSpinBox \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QVBoxLayout \
+		ui_Shape.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QComboBox \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qcombobox.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qicon.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qslider.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qstyle.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
+		..\ZurullitoPaint\filloutline.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\QPen \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QTextEdit \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qframe.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qtextdocument.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qtextcursor.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qtextformat.h \
@@ -1795,8 +1873,29 @@ release\mainwindow.obj: ..\ZurullitoPaint\mainwindow.cpp ..\ZurullitoPaint\mainw
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qicon.h \
 		ui_mainwindow.h \
-		..\ZurullitoPaint\inspector.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\QVariant \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QAction \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qaction.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qactiongroup.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QApplication \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qeventloop.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qguiapplication.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QDockWidget \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdockwidget.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QMenu \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qmenu.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QMenuBar \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qmenubar.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QStatusBar \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qstatusbar.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QToolBar \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qtoolbar.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QWidget \
+		..\ZurullitoPaint\inspector.h \
 		..\ZurullitoPaint\Globals.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\QPainter \
 		C:\Qt\5.14.1\msvc2017_64\include\QtGui\qpainter.h \
@@ -1818,7 +1917,9 @@ release\mainwindow.obj: ..\ZurullitoPaint\mainwindow.cpp ..\ZurullitoPaint\mainw
 		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qdir.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdialog.h
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\QMessageBox \
+		C:\Qt\5.14.1\msvc2017_64\include\QtWidgets\qmessagebox.h
 
 release\test.obj: ..\ZurullitoPaint\test.cpp ..\ZurullitoPaint\test.h \
 		C:\Qt\5.14.1\msvc2017_64\include\QtCore\QObject \
