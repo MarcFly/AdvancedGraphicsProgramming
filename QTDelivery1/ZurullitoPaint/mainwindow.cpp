@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect ecs and Inspector signals and slots
     connect(ecs, SIGNAL(selectedEntity(const uint, const char*,const DrawStruct&)), insp, SLOT(updateEntity(const uint, const char*, const DrawStruct&)));
     connect(insp, SIGNAL(UpdatedEntity(const uint, const char*, DrawStruct&)), ecs, SLOT(updatedEntity(const uint, const char*, DrawStruct&)));
+
     // Linking Hierarchy Widget to Widget Dock
     Hierarchy* hier = new Hierarchy();
     hier->show();

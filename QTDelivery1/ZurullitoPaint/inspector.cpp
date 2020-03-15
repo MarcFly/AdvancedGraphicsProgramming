@@ -37,22 +37,22 @@ Inspector::Inspector(QWidget *parent) :
 
     layout->addWidget(line);
 
-    // Transform
-    QWidget* wtransform = new QWidget();
-    uiTransform->setupUi(wtransform);
-    layout->addWidget(wtransform);
-    SetupTransform();
+    //  Shape
+    QWidget* wshape = new QWidget();
+    uiShape->setupUi(wshape);
+    layout->addWidget(wshape);
+    SetupShape();
 
     line = new QFrame(this);
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
     layout->addWidget(line);
 
-    //  Shape
-    QWidget* wshape = new QWidget();
-    uiShape->setupUi(wshape);
-    layout->addWidget(wshape);
-    SetupShape();
+    // Transform
+    QWidget* wtransform = new QWidget();
+    uiTransform->setupUi(wtransform);
+    layout->addWidget(wtransform);
+    SetupTransform();
 
     line = new QFrame(this);
         line->setFrameShape(QFrame::HLine);
@@ -105,9 +105,11 @@ void Inspector::updateEntity(const uint id, const char* name,const DrawStruct& d
     case DrawShapes::Circle:
     case DrawShapes::Box:
         uiTransform->labelScale->setText("Scale");
+        uiFill->show();
         break;
     case DrawShapes::Line:
         uiTransform->labelScale->setText("Position 2");
+        uiFill->hide();
         break;
     }
 
@@ -115,6 +117,9 @@ void Inspector::updateEntity(const uint id, const char* name,const DrawStruct& d
 
     uiFill->Update(drawData.fill, drawData.outline);
     uiOutline->Update(drawData.fill, drawData.outline);
+
+    uiFill->SRepaint();
+    uiOutline->SRepaint();
 
     updating = false;
 }
@@ -136,6 +141,9 @@ void Inspector::sendUpdate()
 
         dD.fill = uiFill->GetFill();
         dD.outline = uiOutline->GetOutline();
+
+        uiFill->repaint();
+        uiOutline->repaint();
 
         UpdatedEntity(curr_id, str.c_str(), dD);
     }

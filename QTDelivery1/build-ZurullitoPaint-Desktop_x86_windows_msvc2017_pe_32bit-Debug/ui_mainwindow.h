@@ -17,6 +17,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +37,7 @@ public:
     QWidget *widgHierarchy;
     QDockWidget *dockInspector;
     QWidget *widgInspector;
+    QToolBar *toolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -44,10 +46,19 @@ public:
         MainWindow->resize(800, 600);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/Empty document new.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNew->setIcon(icon);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/icons/Folder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen->setIcon(icon1);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/icons/Disquette.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave->setIcon(icon2);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -74,12 +85,18 @@ public:
         widgInspector->setObjectName(QString::fromUtf8("widgInspector"));
         dockInspector->setWidget(widgInspector);
         MainWindow->addDockWidget(Qt::RightDockWidgetArea, dockInspector);
+        toolBar = new QToolBar(MainWindow);
+        toolBar->setObjectName(QString::fromUtf8("toolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuEdit->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
+        toolBar->addAction(actionNew);
+        toolBar->addAction(actionOpen);
+        toolBar->addAction(actionSave);
 
         retranslateUi(MainWindow);
 
@@ -96,6 +113,7 @@ public:
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         dockHierarchy->setWindowTitle(QCoreApplication::translate("MainWindow", "Hierarchy", nullptr));
         dockInspector->setWindowTitle(QCoreApplication::translate("MainWindow", "Inspector", nullptr));
+        toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));
     } // retranslateUi
 
 };

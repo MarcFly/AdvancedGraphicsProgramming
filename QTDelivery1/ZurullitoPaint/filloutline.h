@@ -65,6 +65,7 @@ private:
 
 signals:
     void sendUpdate();
+    void SRepaint();
 
 public slots:
     void change_fp(int val);

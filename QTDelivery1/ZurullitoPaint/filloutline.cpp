@@ -149,6 +149,7 @@ FillOutline::FillOutline(bool is_fp, QWidget *parent) : QWidget(parent)
     connect(types, SIGNAL(currentIndexChanged(int)), this, SLOT(change_fp(int)));
 
     connect(expo, SIGNAL(sendUpdate()), this, SIGNAL(sendUpdate()));
+    connect(this, SIGNAL(SRepaint()), expo, SLOT(repaint()));
 
     connect(width, SIGNAL(valueChanged(int)), this, SLOT(change_pw(int)));
 }
@@ -186,18 +187,20 @@ void FillOutline::Update(const QBrush &b, const QPen &p)
 {
     if(expo->fp)
     {
-        delete expo->b;
-        expo->b = new QBrush(b);
+        expo->b->setColor(b.color());
+        expo->b->setStyle(b.style());
         types->setCurrentIndex((int)b.style());
+
     }
     else
     {
-        delete expo->p;
-        expo->p = new QPen(p);
+        expo->p->setWidth(p.width());
+        expo->p->setColor(p.color());
+        expo->p->setStyle(p.style());
         types->setCurrentIndex((int)p.style());
     }
 
-
+    repaint();
 
 }
 

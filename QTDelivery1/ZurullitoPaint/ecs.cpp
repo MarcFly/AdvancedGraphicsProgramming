@@ -94,7 +94,7 @@ void ECS::RemoveEntity(uint id)
 void ECS::executeDraw()
 {
     // Ask draws for the object in the proper order
-    for(uint i = 0; i < entities.size(); ++i)
+    for(int i = entities.size() -1; i >= 0; --i)
         askDraw(entities[i]->drawData);
 
     // Tell the painter that it can end the painting session
@@ -147,16 +147,11 @@ void ECS::updateParenting(uint id, uint p_id, uint pos)
     uint ent_ind = FindEntity(id);
     if(ent_ind != UINT_MAX)
     {
-        Entity* e = entities[ent_ind];
-        if(e->parent == nullptr)
-        {
-            if(p_id != NULL)
-                changeParent(e, p_id, pos);
-        }
-        else if(e->parent != nullptr && e->parent->id != p_id)
-        {
-            changeParent(e, p_id, pos);
-        }
+        bool stm1 = ent_ind != GetRealPos(p_id, pos);
+        bool stm2 = entities[ent_ind]-> parent == nullptr && p_id != NULL;
+        bool stm3 = entities[ent_ind]->parent != nullptr && entities[ent_ind]->p_id != p_id;
+        if(stm1 || stm2 || stm3)
+            changeParent(entities[ent_ind], p_id, pos);
     }
 }
 
@@ -186,21 +181,69 @@ void ECS::changeParent(Entity *e, uint p_id, uint pos)
         swap_v.clear();
     }
 
+    // Remove from hierarchy
+
+    for(uint i = 0; i < entities.size(); ++i)
+        if(entities[i] != e) swap_v.push_back(entities[i]);
+    entities.swap(swap_v);
+    swap_v.clear();
+
     e->parent = new_p;
 
     if(new_p != nullptr)
     {
-        // naive reparenting, no proper order
-        new_p->children.push_back(e);
+        // Add in order to parent's children
+        for(uint i = 0; i < pos; ++i)
+            swap_v.push_back(new_p->children[i]);
 
-        // Child reordering, not yet in the entities vector
-        e = new_p->children[pos];
-        new_p->children[pos] = new_p->children[new_p->children.size()-1];
-        new_p->children[new_p->children.size()-1] = e;
+        swap_v.push_back(e);
 
-        //  Reorder vector with new list
+        for(uint i = pos; i < new_p->children.size(); ++i)
+            swap_v.push_back(new_p->children[i]);
 
+        new_p->children.swap(swap_v);
+        swap_v.clear();
+
+        // Add back to entity vector
+        for(uint i = 0; i < p_ind; ++i)
+            swap_v.push_back(entities[i]);
+        swap_v.push_back(e);
+        for(uint i = p_ind; i < entities.size(); ++i)
+            swap_v.push_back(entities[i]);
+
+        entities.swap(swap_v);
+
+        swap_v.clear();
     }
+    else
+    {
+        // For entities that stopped having a parent, we need other solution
+        // Have to find pos of NULL parent entities to determine new position
+
+        int epos = -1;
+        int rpos = 0;
+        int last_child_pos = 0;
+        for(uint i = 0; epos < pos && i < entities.size();++i)
+            if(entities[i]->p_id == NULL)
+            {
+                if(last_child_pos != rpos) last_child_pos = rpos;
+                ++epos;
+                rpos = i;
+            }
+
+        // Add back to entity vector
+        for(uint i = 0; i < last_child_pos; ++i)
+            swap_v.push_back(entities[i]);
+        swap_v.push_back(e);
+        for(uint i = last_child_pos; i < entities.size(); ++i)
+            swap_v.push_back(entities[i]);
+
+        entities.swap(swap_v);
+
+        swap_v.clear();
+    }
+
+    callRePaint();
 
 }
 
