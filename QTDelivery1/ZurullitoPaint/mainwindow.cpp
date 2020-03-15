@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect canvas and inspector
     connect(wcanvas, SIGNAL(Mouse(int, int)), insp, SLOT(MouseMove(int, int)));
 
-
+    hier->newFile();
 }
 
 MainWindow::~MainWindow()

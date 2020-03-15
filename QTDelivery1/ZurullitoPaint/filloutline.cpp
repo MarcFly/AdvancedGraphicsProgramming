@@ -185,6 +185,7 @@ void FillOutline::change_pw(int val)
 
 void FillOutline::Update(const QBrush &b, const QPen &p)
 {
+
     if(expo->fp)
     {
         expo->b->setColor(b.color());
@@ -193,7 +194,8 @@ void FillOutline::Update(const QBrush &b, const QPen &p)
 
     }
     else
-    {
+    {        
+        width->setValue(p.width());
         expo->p->setWidth(p.width());
         expo->p->setColor(p.color());
         expo->p->setStyle(p.style());

@@ -26,7 +26,6 @@ Hierarchy::Hierarchy(QWidget *parent) :
     connect(ui->buttonRemove, SIGNAL(clicked()), this, SLOT(onRemove()));
 
     ui->treeHierarchy->clearSelection();
-    SelectionCleared();
 }
 
 Hierarchy::~Hierarchy()
@@ -172,6 +171,7 @@ void Hierarchy::newFile()
     fromNF  = true;
     ui->treeHierarchy->clearSelection();
     ui->treeHierarchy->setCurrentItem(nullptr);
+    SelectionCleared();
 
     while(ui->treeHierarchy->topLevelItemCount() > 0)
     {

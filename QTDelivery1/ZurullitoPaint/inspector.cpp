@@ -119,6 +119,8 @@ void Inspector::updateEntity(const uint id, const char* name,const DrawStruct& d
 
     UpdateShape(drawData.shape);
 
+
+
     uiFill->Update(drawData.fill, drawData.outline);
     uiOutline->Update(drawData.fill, drawData.outline);
 
