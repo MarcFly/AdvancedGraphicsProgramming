@@ -449,23 +449,23 @@ void ECS::MousePick(int x, int y)
 
     for(uint i = 0; i < entities.size(); ++i)
     {
-        int vx, vy;
+
+        double vx, vy;
         vx = x - entities[i]->drawData.t.px;
         vy = y - entities[i]->drawData.t.py;
 
-        double dx = cos(entities[i]->drawData.t.r)*vx - sin(entities[i]->drawData.t.r)*vy;
-        double dy = sin(entities[i]->drawData.t.r)*vx + cos(entities[i]->drawData.t.r)*vy;
-
-        double realx = dx + entities[i]->drawData.t.px;
-        double realy = dy + entities[i]->drawData.t.py;
+        double r_rads = qDegreesToRadians(-entities[i]->drawData.t.r);
+        double dx = cos(r_rads)*vx - sin(r_rads)*vy;
+        double dy = sin(r_rads)*vx + cos(r_rads)*vy;
 
         double x1,x2,y1,y2;
-        x1 = entities[i]->drawData.t.px - (entities[i]->drawData.t.sx / 2);
-        x2 = entities[i]->drawData.t.px + (entities[i]->drawData.t.sx / 2);
-        y1 = entities[i]->drawData.t.py - (entities[i]->drawData.t.sy / 2);
-        y2 = entities[i]->drawData.t.py + (entities[i]->drawData.t.sy / 2);
+        x1 = -1.* (entities[i]->drawData.t.sx / 2);
+        x2 = (entities[i]->drawData.t.sx / 2);
 
-        if(realx >= x1 && realx <= x2 && realy >= y1 && realy <= y2)
+        y1 = -1.* (entities[i]->drawData.t.sy / 2);
+        y2 = (entities[i]->drawData.t.sy / 2);
+
+        if(dx >= x1 && dx <= x2 && dy >= y1 && dy <= y2)
         {
             check = 0;
             MousePickSelect(entities[i]->id);
